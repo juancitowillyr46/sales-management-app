@@ -1,11 +1,6 @@
 <?php declare(strict_types=1);
 
-use App\Core\Products\Application\UseCase\IProductManagerUseCase;
-use App\Core\Products\Application\UseCase\ProductManagerUseCase;
-use App\Core\Products\Domain\Repository\IProductManagerRepository;
-use App\Core\Products\Domain\Service\IProductManagerService;
-use App\Core\Products\Domain\Service\ProductManagerService;
-use App\Core\Products\Infrastructure\Persistence\Repository\Eloquent\ProductManagerRepository;
+use App\Shared\Application\Slim\Settings\Settings;
 use App\Shared\Application\Slim\Settings\SettingsInterface;
 use DI\ContainerBuilder;
 use Monolog\Handler\StreamHandler;
@@ -18,6 +13,18 @@ return function (ContainerBuilder $containerBuilder) {
 
     // Global Settings Object
     $containerBuilder->addDefinitions([
+        SettingsInterface::class => function () {
+            return new Settings([
+                'displayErrorDetails' => false, // Should be set to false in production
+                'logError'            => false,
+                'logErrorDetails'     => false,
+                'logger' => [
+                    'name' => 'slim-app',
+                    'path' => __DIR__ . '/../logs/app.log',
+                    'level' => Logger::DEBUG,
+                ],
+            ]);
+        },
         LoggerInterface::class => function (ContainerInterface $c) {
             $settings = $c->get(SettingsInterface::class);
 
@@ -31,9 +38,6 @@ return function (ContainerBuilder $containerBuilder) {
             $logger->pushHandler($handler);
 
             return $logger;
-        },
-        IProductManagerRepository::class => \DI\autowire(ProductManagerRepository::class),
-        IProductManagerService::class => \DI\autowire(ProductManagerService::class),
-        IProductManagerUseCase::class => \DI\autowire(ProductManagerUseCase::class),
+        }
     ]);
 };

@@ -17,16 +17,28 @@ try {
     $containerBuilder = new ContainerBuilder();
 
     // Global Settings Object
-    $containerc = require __DIR__ . '/../config/container.php';
-    $containerc($containerBuilder);
+    $globalSettings = require __DIR__ . '/../app/main.php';
+    $globalSettings($containerBuilder);
 
     // Set up settings
-    $settings = require __DIR__ . '/../config/settings.php';
+    $settings = require __DIR__ . '/../app/settings.php';
     $settings($containerBuilder);
 
     // Set up dependencies
-    $dependencies = require __DIR__ . '/../config/dependencies.php';
+    $dependencies = require __DIR__ . '/../app/dependencies.php';
     $dependencies($containerBuilder);
+
+    // Set up repositories
+    $repositories = require __DIR__ . '/../app/repositories.php';
+    $repositories($containerBuilder);
+
+    // Set up services
+    $services = require __DIR__ . '/../app/services.php';
+    $services($containerBuilder);
+
+    // Set up use cases
+    $use_cases = require __DIR__ . '/../app/use-cases.php';
+    $use_cases($containerBuilder);
 
     // Build PHP-DI Container instance
     $container = $containerBuilder->build();
@@ -38,11 +50,11 @@ try {
     $callableResolver = $app->getCallableResolver();
 
     // Register Middleware
-    $middleware = require __DIR__ . '/../config/middleware.php';
+    $middleware = require __DIR__ . '/../app/middleware.php';
     $middleware($app);
 
     // Register Routes
-    $routes = require __DIR__ . '/../config/routes.php';
+    $routes = require __DIR__ . '/../app/routes.php';
     $routes($app);
 
     $settings = $container->get(SettingsInterface::class);
