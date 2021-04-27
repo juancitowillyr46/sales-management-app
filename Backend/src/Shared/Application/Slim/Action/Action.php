@@ -3,8 +3,6 @@
 
 namespace App\Shared\Application\Slim\Action;
 
-
-//use App\Shared\Domain\Services\BaseService;
 use Exception;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;

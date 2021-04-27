@@ -16,10 +16,10 @@ return function (ContainerBuilder $containerBuilder) {
                 'logErrorDetails'     => false,
                 'logger' => [
                     'name' => 'slim-app',
-                    'path' => '/../logs/app.log',
+                    'path' => __DIR__ . '/../logs/app.log',
                     'level' => Logger::DEBUG,
                 ],
             ]);
-        }
+        },
     ]);
 };

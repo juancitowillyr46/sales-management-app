@@ -23,11 +23,6 @@ use Throwable;
 
 class HttpErrorHandler extends SlimErrorHandler
 {
-    public function __construct(CallableResolverInterface $callableResolver, ResponseFactoryInterface $responseFactory, ?LoggerInterface $logger )
-    {
-        parent::__construct($callableResolver, $responseFactory, $logger);
-    }
-
     /**
      * @inheritdoc
      */
