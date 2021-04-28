@@ -32,7 +32,9 @@ class ProductRequest
 
     public function __construct(object $requestBody)
     {
+
         $this->validateRequest($requestBody);
+
         $this->uuid = $requestBody->uuid;
         $this->image = $requestBody->image;
         $this->name = $requestBody->name;
@@ -44,22 +46,7 @@ class ProductRequest
         $this->featured = $requestBody->featured;
         $this->cost = $requestBody->cost;
         $this->promotionPrice = $requestBody->promotionPrice;
-    }
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     /**

@@ -1,6 +1,10 @@
 <?php declare(strict_types=1);
 
-use App\Core\Products\Infrastructure\Controller\Slim\ProductMaintainerController;
+use App\Core\Products\Infrastructure\Controller\Slim\AllProductsManagerAction;
+use App\Core\Products\Infrastructure\Controller\Slim\CreateProductManagerAction;
+use App\Core\Products\Infrastructure\Controller\Slim\DeleteProductManagerAction;
+use App\Core\Products\Infrastructure\Controller\Slim\ReadProductManagerAction;
+use App\Core\Products\Infrastructure\Controller\Slim\UpdateProductManagerAction;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -16,7 +20,10 @@ return function (App $app) {
         return $response;
     });
     $app->group('/products', function (Group $group) {
-        $group->get('/{id}', \App\Core\Products\Infrastructure\Controller\Slim\SaveProductAction::class);
-        //$group->get('/{id}', ViewUserAction::class);
+        $group->get('', AllProductsManagerAction::class);
+        $group->post('/', CreateProductManagerAction::class);
+        $group->get('/{productCode}', ReadProductManagerAction::class);
+        $group->put('/{productCode}', UpdateProductManagerAction::class);
+        $group->delete('/{productCode}', DeleteProductManagerAction::class);
     });
 };
