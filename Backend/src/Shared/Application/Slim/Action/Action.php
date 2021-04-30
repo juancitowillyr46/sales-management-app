@@ -10,6 +10,10 @@ use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
 
+/**
+ * @OA\Server(url="http://localhost:4300")
+ * @OA\Info(title="Managerment Products", version="0.1")
+ */
 abstract class Action
 {
     protected LoggerInterface $logger;

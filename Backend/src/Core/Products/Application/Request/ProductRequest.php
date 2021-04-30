@@ -15,10 +15,28 @@ use Symfony\Component\Validator\Validator\TraceableValidator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\ValidatorBuilder;
 
+/**
+ * @OA\Schema(
+ *     schema="Product",
+ *     title="Product",
+ *     description="A simple product model."
+ * )
+ */
 class ProductRequest
 {
+    /**
+     * @OA\Property(type="string", example="uuid")
+     */
     public string $uuid;
+
+    /**
+     * @OA\Property(type="string", example="image")
+     */
     public string $image;
+
+    /**
+     * @OA\Property(type="string", example="name")
+     */
     public string $name;
     public float $price;
     public string $description;
