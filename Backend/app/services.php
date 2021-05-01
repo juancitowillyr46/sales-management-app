@@ -1,12 +1,11 @@
 <?php declare(strict_types=1);
 
-
-use App\Core\Products\Domain\Service\IProductManagerService;
-use App\Core\Products\Domain\Service\ProductManagerService;
+use App\Core\Products\Domain\Service\ProductService;
+use App\Core\Products\Domain\Service\ProductServiceInterface;
 use DI\ContainerBuilder;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
-        IProductManagerService::class => \DI\autowire(ProductManagerService::class),
+        ProductServiceInterface::class => \DI\autowire(ProductService::class),
     ]);
 };

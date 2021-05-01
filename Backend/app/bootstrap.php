@@ -24,9 +24,9 @@ try {
     $settings = require __DIR__ . '/../app/settings.php';
     $settings($containerBuilder);
 
-    // Set up dependencies
-    $dependencies = require __DIR__ . '/../app/dependencies.php';
-    $dependencies($containerBuilder);
+//    // Set up dependencies
+//    $dependencies = require __DIR__ . '/../app/dependencies.php';
+//    $dependencies($containerBuilder);
 
     // Set up repositories
     $repositories = require __DIR__ . '/../app/repositories.php';
@@ -70,7 +70,7 @@ try {
 
     // Create Error Handler
     $responseFactory = $app->getResponseFactory();
-    $errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
+    $errorHandler = new HttpErrorHandler($callableResolver, $responseFactory, $container->get(LoggerInterface::class));
 
     // Create Shutdown Handler
     $shutdownHandler = new ShutdownHandler($request, $errorHandler, $displayErrorDetails);

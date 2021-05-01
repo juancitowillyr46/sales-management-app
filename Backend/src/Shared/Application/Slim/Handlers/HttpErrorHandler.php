@@ -23,6 +23,12 @@ use Throwable;
 
 class HttpErrorHandler extends SlimErrorHandler
 {
+
+    public function __construct(CallableResolverInterface $callableResolver, ResponseFactoryInterface $responseFactory, ?LoggerInterface $logger = null)
+    {
+        parent::__construct($callableResolver, $responseFactory, $logger);
+    }
+
     /**
      * @inheritdoc
      */
@@ -61,6 +67,7 @@ class HttpErrorHandler extends SlimErrorHandler
         ) {
             $error->setDescription($exception->getMessage());
         }
+
 
         $this->logger->error($exception->getMessage());
 

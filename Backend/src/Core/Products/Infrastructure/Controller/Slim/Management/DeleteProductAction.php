@@ -4,11 +4,11 @@
 namespace App\Core\Products\Infrastructure\Controller\Slim\Management;
 
 
-use App\Core\Products\Infrastructure\Controller\Slim\Abstracts\ProductManagementActionAbstract;
+use App\Core\Products\Infrastructure\Controller\Slim\Abstracts\ProductActionAbstract;
 use Psr\Http\Message\ResponseInterface as Response;
 use stdClass;
 
-class DeleteProductAction extends ProductManagementActionAbstract
+class DeleteProductAction extends ProductActionAbstract
 {
 
     /**
@@ -24,9 +24,9 @@ class DeleteProductAction extends ProductManagementActionAbstract
      */
     protected function action(): Response
     {
-        $productCode = $this->resolveArg('productCode');
+        $productCode = $this->resolveArg('uuid');
 
-        $this->productManagerUseCase->removeProductByCode($productCode);
+        $this->productUseCase->deleteProductByUuid($productCode);
 
         return $this->respondWithData(new StdClass(), 200);
     }

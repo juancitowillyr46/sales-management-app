@@ -2,7 +2,7 @@
 
 use App\Core\Products\Infrastructure\Controller\Slim\Management\AddProductAction;
 use App\Core\Products\Infrastructure\Controller\Slim\Management\DeleteProductAction;
-use App\Core\Products\Infrastructure\Controller\Slim\Management\FindProductByIdAction;
+use App\Core\Products\Infrastructure\Controller\Slim\Management\FindProductByUuidAction;
 use App\Core\Products\Infrastructure\Controller\Slim\Management\FindProductsAction;
 use App\Core\Products\Infrastructure\Controller\Slim\Management\UpdateProductAction;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -22,8 +22,8 @@ return function (App $app) {
     $app->group('/products', function (Group $group) {
         $group->get('', FindProductsAction::class);
         $group->post('/', AddProductAction::class);
-        $group->get('/{id}', FindProductByIdAction::class);
-        $group->put('/{id}', UpdateProductAction::class);
-        $group->delete('/{id}', DeleteProductAction::class);
+        $group->get('/{uuid}', FindProductByUuidAction::class);
+        $group->put('/{uuid}', UpdateProductAction::class);
+        $group->delete('/{uuid}', DeleteProductAction::class);
     });
 };

@@ -5,18 +5,18 @@ namespace App\Core\Products\Infrastructure\Controller\Slim\Management;
 
 
 use App\Core\Products\Application\Request\ProductRequest;
-use App\Core\Products\Infrastructure\Controller\Slim\Abstracts\ProductManagementActionAbstract;
+use App\Core\Products\Infrastructure\Controller\Slim\Abstracts\ProductActionAbstract;
 use Psr\Http\Message\ResponseInterface as Response;
 use stdClass;
 
-class UpdateProductAction extends ProductManagementActionAbstract
+class UpdateProductAction extends ProductActionAbstract
 {
 
     protected function action(): Response
     {
         $this->productRequest = new ProductRequest($this->request->getBody());
-        $productCode = $this->resolveArg('productCode');
-        $this->productManagerUseCase->editProductByCode($productCode, $this->productRequest);
+        $productCode = $this->resolveArg('uuid');
+        $this->productUseCase->updateProductByUuid($productCode, $this->productRequest);
 
         return $this->respondWithData(new StdClass(), 200);
     }

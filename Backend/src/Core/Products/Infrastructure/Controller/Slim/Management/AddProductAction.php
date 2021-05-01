@@ -5,11 +5,11 @@ namespace App\Core\Products\Infrastructure\Controller\Slim\Management;
 
 
 use App\Core\Products\Application\Request\ProductRequest;
-use App\Core\Products\Infrastructure\Controller\Slim\Abstracts\ProductManagementActionAbstract;
+use App\Core\Products\Infrastructure\Controller\Slim\Abstracts\ProductActionAbstract;
 use Psr\Http\Message\ResponseInterface as Response;
 use stdClass;
 
-class AddProductAction extends ProductManagementActionAbstract
+class AddProductAction extends ProductActionAbstract
 {
     /**
      * @OA\Post(
@@ -34,7 +34,7 @@ class AddProductAction extends ProductManagementActionAbstract
     {
         $this->productRequest = new ProductRequest($this->request->getBody());
 
-        $this->productManagerUseCase->saveProduct($this->productRequest);
+        $this->productUseCase->addProduct($this->productRequest);
 
         return $this->respondWithData(new StdClass(), 201);
     }

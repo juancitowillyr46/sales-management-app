@@ -29,6 +29,7 @@ class ActionError implements JsonSerializable
     {
         $this->type = $type;
         $this->description = $description;
+
     }
 
     public function getType(): string

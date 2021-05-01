@@ -4,10 +4,10 @@
 namespace App\Core\Products\Infrastructure\Controller\Slim\Management;
 
 
-use App\Core\Products\Infrastructure\Controller\Slim\Abstracts\ProductManagementActionAbstract;
+use App\Core\Products\Infrastructure\Controller\Slim\Abstracts\ProductActionAbstract;
 use Psr\Http\Message\ResponseInterface as Response;
 
-class FindProductsAction extends ProductManagementActionAbstract
+class FindProductsAction extends ProductActionAbstract
 {
     /**
      * @OA\Get(
@@ -22,7 +22,7 @@ class FindProductsAction extends ProductManagementActionAbstract
      */
     protected function action(): Response
     {
-        $products = $this->productManagerUseCase->getProducts([]);
+        $products = $this->productUseCase->findProducts([]);
 
         return $this->respondWithData($products, 200);
     }

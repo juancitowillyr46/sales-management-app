@@ -4,18 +4,18 @@
 namespace App\Core\Products\Infrastructure\Controller\Slim\Management;
 
 
-use App\Core\Products\Infrastructure\Controller\Slim\Abstracts\ProductManagementActionAbstract;
+use App\Core\Products\Infrastructure\Controller\Slim\Abstracts\ProductActionAbstract;
 use App\Shared\Application\Slim\Action\ActionError;
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 
-class FindProductByIdAction extends ProductManagementActionAbstract
+class FindProductByUuidAction extends ProductActionAbstract
 {
     /**
      * @OA\Get(
      *   tags={"Product"},
-     *   path="/products/{id}",
-     *   operationId="findProductByIdProduct",
+     *   path="/products/{uuid}",
+     *   operationId="FindProductByUuidAction",
      *   @OA\Parameter(
      *          name="id",
      *          in="path",
@@ -33,20 +33,22 @@ class FindProductByIdAction extends ProductManagementActionAbstract
      */
     protected function action(): Response
     {
-        try {
 
-            $productCode = $this->resolveArg('id');
+//        try {
 
-            $productDto = $this->productManagerUseCase->getProductByCode($productCode);
+            $productCode = $this->resolveArg('uuid');
+
+            $productDto = $this->productUseCase->findProductByUuid($productCode);
+
             return $this->respondWithData($productDto, 200);
 
-        } catch (Exception $e) {
-
-            $error = new ActionError(ActionError::RESOURCE_NOT_FOUND, $e->getMessage());
-
-            return $this->respondWithData($error, 404);
-
-        }
+//        } catch (Exception $e) {
+//
+//            $error = new ActionError(ActionError::RESOURCE_NOT_FOUND, $e->getMessage());
+//
+//            return $this->respondWithData($error, 404);
+//
+//        }
 
     }
 }
