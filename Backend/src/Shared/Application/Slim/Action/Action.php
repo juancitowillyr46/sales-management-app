@@ -5,7 +5,7 @@ namespace App\Shared\Application\Slim\Action;
 
 use App\Shared\Domain\DomainException\DomainRecordNotFoundException;
 use Exception;
-use Psr\Http\Message\RequestInterface as Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpBadRequestException;

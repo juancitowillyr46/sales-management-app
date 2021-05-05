@@ -17,7 +17,7 @@ class AddProductAction extends ProductActionAbstract
      *   path="/products",
      *   operationId="addProduct",
      *     @OA\RequestBody(
-     *         description="Pet object that needs to be added to the store",
+     *         description="Product object that needs to be added to the store",
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="application/json",
@@ -32,7 +32,8 @@ class AddProductAction extends ProductActionAbstract
      */
     protected function action(): Response
     {
-        $this->productRequest = new ProductRequest($this->request->getBody());
+
+        $this->productRequest = new ProductRequest((object)$this->request->getParsedBody());
 
         $this->productUseCase->addProduct($this->productRequest);
 

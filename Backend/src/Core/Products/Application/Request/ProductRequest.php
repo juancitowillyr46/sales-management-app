@@ -1,6 +1,8 @@
 <?php
 namespace App\Core\Products\Application\Request;
 
+use App\Core\Products\Domain\Exception\ProductNotFoundException;
+use App\Core\Products\Domain\Exception\ProductRequestValidateException;
 use App\Core\Products\Domain\Exception\ProductValidateRequestException;
 use Assert\Assertion;
 use Assert\AssertionFailedException;
@@ -19,33 +21,65 @@ use Symfony\Component\Validator\ValidatorBuilder;
  * @OA\Schema(
  *     schema="Product",
  *     title="Product",
- *     description="A simple product model."
+ *     description="Request Product",
+ *     required={"name", "price"}
  * )
  */
 class ProductRequest
 {
     /**
-     * @OA\Property(type="string", example="uuid")
-     */
-    public string $uuid;
-
-    /**
-     * @OA\Property(type="string", example="image")
+     * @OA\Property(type="string", example="http://w.image.com")
      */
     public string $image;
 
     /**
-     * @OA\Property(type="string", example="name")
+         * @OA\Property(type="string", example="Tornillo")
      */
     public string $name;
+
+    /**
+     * @OA\Property(type="number", example="99.9")
+     */
     public float $price;
+
+    /**
+     * @OA\Property(type="string", example="Lorem Ipsum is simply dummy text of the printing and typesetting industry")
+     */
     public string $description;
-    public int $category;
+
+    /**
+     * @OA\Property(type="string", example="b075dbf1-6d06-4915-9367-982b59769d82")
+     */
+    public string $categoryId;
+
+    /**
+     * @OA\Property(type="string", example="TSH-MED-WHI-COT")
+     */
     public string $skuCode;
-    public int $unitOfMeasurement;
+
+    /**
+     * @OA\Property(type="string", example="cad2a220-d411-4c07-8056-c027b2be6d6e")
+     */
+    public string $measureId;
+
+    /**
+     * @OA\Property(type="boolean", example="true")
+     */
     public bool $featured;
+
+    /**
+     * @OA\Property(type="number", example="9.99")
+     */
     public float $cost;
+
+    /**
+     * @OA\Property(type="integer", example="9")
+     */
     public int $stock;
+
+    /**
+     * @OA\Property(type="number", example="9.99")
+     */
     public float $promotionPrice;
 
     public function __construct(object $requestBody)
@@ -53,14 +87,13 @@ class ProductRequest
 
         $this->validateRequest($requestBody);
 
-        $this->uuid = $requestBody->uuid;
         $this->image = $requestBody->image;
         $this->name = $requestBody->name;
         $this->price = $requestBody->price;
         $this->description = $requestBody->description;
-        $this->category = $requestBody->category;
+        $this->categoryId = $requestBody->categoryId;
         $this->skuCode = $requestBody->skuCode;
-        $this->unitOfMeasurement = $requestBody->unitOfMeasurement;
+        $this->measureId = $requestBody->measureId;
         $this->featured = $requestBody->featured;
         $this->cost = $requestBody->cost;
         $this->promotionPrice = $requestBody->promotionPrice;
@@ -132,19 +165,19 @@ class ProductRequest
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getCategory(): int
+    public function getCategoryId(): string
     {
-        return $this->category;
+        return $this->categoryId;
     }
 
     /**
-     * @param int $category
+     * @param string $categoryId
      */
-    public function setCategory(int $category): void
+    public function setCategory(string $categoryId): void
     {
-        $this->category = $category;
+        $this->categoryId = $categoryId;
     }
 
     /**
@@ -164,19 +197,19 @@ class ProductRequest
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getUnitOfMeasurement(): int
+    public function getMeasureId(): string
     {
-        return $this->unitOfMeasurement;
+        return $this->measureId;
     }
 
     /**
-     * @param int $unitOfMeasurement
+     * @param string $measureId
      */
-    public function setUnitOfMeasurement(int $unitOfMeasurement): void
+    public function setMeasureId(string $measureId): void
     {
-        $this->unitOfMeasurement = $unitOfMeasurement;
+        $this->measureId = $measureId;
     }
 
     /**
@@ -251,10 +284,6 @@ class ProductRequest
 
         $constraint = new Assert\Collection(
             [
-                'uuid' => [
-                    new Assert\Optional(),
-                    new Assert\Uuid()
-                ],
                 'image' => [
                     new Assert\Optional(),
                     new Assert\Url()
@@ -266,19 +295,38 @@ class ProductRequest
                     new Assert\Required(),
                     new Assert\Type('float')
                 ],
-                'description' => new Assert\Optional(),
-                'category' => new Assert\Optional(),
+                'description' => [
+                    new Assert\Optional(),
+                    new Assert\Length([
+                        'min' => 0,
+                        'max' => 250
+                    ])
+                ],
+                'categoryId' => [
+                    new Assert\Optional(),
+                    new Assert\Uuid()
+                ] ,
                 'skuCode' => new Assert\Optional(),
-                'unitOfMeasurement' => new Assert\Optional(),
+                'measureId' => [
+                    new Assert\Optional(),
+                    new Assert\Uuid()
+                ],
                 'featured' => [
                     new Assert\Optional(),
                     new Assert\Type('bool')
                 ],
                 'cost' => [
                     new Assert\Optional(),
-                    new Assert\Type('float','El costo debe ser 0.0')
+                    new Assert\Type('float')
                 ],
-                'promotionPrice' => new Assert\Optional(),
+                'stock' => [
+                    new Assert\Required(),
+                    new Assert\Type('int')
+                ],
+                'promotionPrice' => [
+                    new Assert\Optional(),
+                    new Assert\Type('float')
+                ]
             ]
         );
 
@@ -297,26 +345,9 @@ class ProductRequest
                     "message" => $error->getMessage(),
                 ];
             }
-
-            throw new ProductValidateRequestException($lstErrors);
+            $d = $lstErrors;
+            throw new ProductRequestValidateException();
         }
 
     }
-
-    /**
-     * @return string
-     */
-    public function getUuid(): string
-    {
-        return $this->uuid;
-    }
-
-    /**
-     * @param string $uuid
-     */
-    public function setUuid(string $uuid): void
-    {
-        $this->uuid = $uuid;
-    }
-
 }

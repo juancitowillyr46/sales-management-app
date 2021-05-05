@@ -17,14 +17,16 @@ class FindProductByUuidAction extends ProductActionAbstract
      *   path="/products/{uuid}",
      *   operationId="FindProductByUuidAction",
      *   @OA\Parameter(
-     *          name="id",
-     *          in="path",
-     *          required=true,
-     *          description="Product Code",
-     *          @OA\Schema(
-     *              type="string"
-     *          )
-     *   ),
+     *         name="uuid",
+     *         in="query",
+     *         description="Unique resource identifier",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string",
+     *           @OA\Items(type="string"),
+     *         ),
+     *         style="form"
+     *    ),
      *   @OA\Response(
      *     response=200,
      *     description="Find product by id"

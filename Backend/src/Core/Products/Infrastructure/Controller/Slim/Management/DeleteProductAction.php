@@ -14,8 +14,19 @@ class DeleteProductAction extends ProductActionAbstract
     /**
      * @OA\Delete (
      *   tags={"Product"},
-     *   path="/products",
+     *   path="/products/{uuid}",
      *   operationId="deleteProducts",
+     *   @OA\Parameter(
+     *         name="uuid",
+     *         in="query",
+     *         description="Unique resource identifier",
+     *         required=true,
+     *         @OA\Schema(
+     *           type="string",
+     *           @OA\Items(type="string"),
+     *         ),
+     *         style="form"
+     *    ),
      *   @OA\Response(
      *     response=200,
      *     description="Delete products"

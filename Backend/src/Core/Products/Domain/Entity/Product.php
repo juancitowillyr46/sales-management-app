@@ -208,7 +208,6 @@ class Product extends BaseEntity
     }
 
     public function transformRequestToEntity(ProductRequest $productRequest): Product {
-        $this->setUuid($productRequest->getUuid());
         $this->setImage($productRequest->getImage());
         $this->setName($productRequest->getName());
         $this->setPrice($productRequest->getPrice());

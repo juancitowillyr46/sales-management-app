@@ -1,11 +1,12 @@
 <?php
 
+
 namespace App\Core\Products\Domain\Exception;
 
 
 use App\Shared\Domain\DomainException\DomainRecordNotFoundException;
 
-class ProductNotFoundException extends DomainRecordNotFoundException
+class MeasureNotFoundException extends DomainRecordNotFoundException
 {
-    protected $message = "PRODUCT NOT FOUND";
+    protected $message = "MEASURE NOT FOUND";
 }

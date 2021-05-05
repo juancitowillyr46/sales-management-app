@@ -7,18 +7,27 @@ namespace App\Core\Products\Application\UseCase;
 use App\Core\Products\Application\Dto\ProductDto;
 use App\Core\Products\Application\Request\ProductRequest;
 use App\Core\Products\Domain\Service\ProductServiceInterface;
+use App\Core\Products\Domain\Service\ResourceServiceInterface;
 
 class ProductUseCase implements ProductUseCaseInterface
 {
     protected ProductServiceInterface $productService;
+    protected ResourceServiceInterface $categoryGetIdService;
+    protected ResourceServiceInterface $measureGetIdService;
 
-    public function __construct(ProductServiceInterface $productService)
+    public function __construct(ProductServiceInterface $productService, ResourceServiceInterface $categoryGetIdService, ResourceServiceInterface $measureGetIdService)
     {
         $this->productService = $productService;
+        $this->categoryGetIdService = $categoryGetIdService;
+        $this->measureGetIdService = $measureGetIdService;
     }
 
     public function addProduct(ProductRequest $productRequest): void
     {
+
+        $this->categoryGetIdService->returnIdResource($productRequest->getCategoryId());
+        $this->measureGetIdService->returnIdResource($productRequest->getMeasureId());
+
         $this->productService->addProduct($productRequest);
     }
 

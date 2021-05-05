@@ -21,7 +21,7 @@ return function (App $app) {
     });
     $app->group('/products', function (Group $group) {
         $group->get('', FindProductsAction::class);
-        $group->post('/', AddProductAction::class);
+        $group->post('', AddProductAction::class);
         $group->get('/{uuid}', FindProductByUuidAction::class);
         $group->put('/{uuid}', UpdateProductAction::class);
         $group->delete('/{uuid}', DeleteProductAction::class);
