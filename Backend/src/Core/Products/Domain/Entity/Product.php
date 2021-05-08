@@ -10,25 +10,28 @@ class Product extends BaseEntity
     public string $description;
     public string $image;
     public float $price;
-    public int $category;
+    public int $categoryId;
     public string $skuCode;
-    public int $unitOfMeasurement;
+    public int $measureId;
     public bool $featured;
     public float $cost;
     public int $stock;
     public float $promotionPrice;
+    public string $presentation;
 
     public function __construct()
     {
-
         $this->uuid = $this->generateUuid();
-        $this->promotionPrice = 0;
-        $this->category = 0;
+        $this->image = "";
+        $this->name = "";
         $this->description = "";
+        $this->categoryId = 0;
         $this->skuCode = "";
-        $this->cost = 0;
-        $this->unitOfMeasurement = 0;
+        $this->cost = 0.0;
+        $this->measureId = 0;
         $this->featured = false;
+        $this->promotionPrice = 0.0;
+        $this->presentation = "";
     }
 
     /**
@@ -98,17 +101,17 @@ class Product extends BaseEntity
     /**
      * @return int
      */
-    public function getCategory(): int
+    public function getCategoryId(): int
     {
-        return $this->category;
+        return $this->categoryId;
     }
 
     /**
-     * @param int $category
+     * @param int $categoryId
      */
-    public function setCategory(int $category): void
+    public function setCategoryId(int $categoryId): void
     {
-        $this->category = $category;
+        $this->categoryId = $categoryId;
     }
 
     /**
@@ -130,17 +133,17 @@ class Product extends BaseEntity
     /**
      * @return int
      */
-    public function getUnitOfMeasurement(): int
+    public function getMeasureId(): int
     {
-        return $this->unitOfMeasurement;
+        return $this->measureId;
     }
 
     /**
-     * @param int $unitOfMeasurement
+     * @param int $measureId
      */
-    public function setUnitOfMeasurement(int $unitOfMeasurement): void
+    public function setMeasureId(int $measureId): void
     {
-        $this->unitOfMeasurement = $unitOfMeasurement;
+        $this->measureId = $measureId;
     }
 
     /**
@@ -207,11 +210,59 @@ class Product extends BaseEntity
         $this->promotionPrice = $promotionPrice;
     }
 
+    /**
+     * @return string
+     */
+    public function getPresentation(): string
+    {
+        return $this->presentation;
+    }
+
+    /**
+     * @param string $presentation
+     */
+    public function setPresentation(string $presentation): void
+    {
+        $this->presentation = $presentation;
+    }
+
     public function transformRequestToEntity(ProductRequest $productRequest): Product {
+
         $this->setImage($productRequest->getImage());
         $this->setName($productRequest->getName());
         $this->setPrice($productRequest->getPrice());
+        $this->setDescription($productRequest->getDescription());
+        //$this->setCategoryId($productRequest->getCategoryId());
+        $this->setSkuCode($productRequest->getSkuCode());
+        //$this->setMeasureId($productRequest->getMeasureId());
+        $this->setFeatured($productRequest->getFeatured());
+        $this->setCost($productRequest->getCost());
+        $this->setPromotionPrice($productRequest->getPromotionPrice());
+        $this->setStock($productRequest->getStock());
+        $this->setPresentation($productRequest->getPresentation());
+
         return $this;
+    }
+
+    public function transformEntityToModel(Product $product): array {
+        $fields = [
+            'uuid' => $product->getUuid(),
+            'sku_code' => $product->getSkuCode(),
+            'description' => $product->getDescription(),
+            'name' => $product->getName(),
+            'image' => $product->getImage(),
+            'price' => $product->getPrice(),
+            'cost' => $product->getCost(),
+            'promotion_price' => $product->getPromotionPrice(),
+            'measure_id' => $product->getMeasureId(),
+            'category_id' => $product->getCategoryId(),
+            'presentation'=> $product->getPresentation(),
+            'stock' => $product->getStock(),
+            'featured' => $product->getFeatured(),
+            'state_id' => 1,
+            'created_by' => 'JUAN'
+        ];
+        return $fields;
     }
 
 }

@@ -15,18 +15,28 @@ class ProductService implements ProductServiceInterface
 {
 
     protected ProductRepositoryInterface $productRepository;
+    protected ResourceServiceInterface $categoryGetIdService;
+    protected ResourceServiceInterface $measureGetIdService;
     protected Product $product;
 
-    public function __construct(ProductRepositoryInterface $productRepository)
+    public function __construct(ProductRepositoryInterface $productRepository, ResourceServiceInterface $categoryGetIdService, ResourceServiceInterface $measureGetIdService)
     {
         $this->productRepository = $productRepository;
+        $this->categoryGetIdService = $categoryGetIdService;
+        $this->measureGetIdService = $measureGetIdService;
         $this->product = new Product();
     }
 
 
     public function addProduct(ProductRequest $productRequest): bool
     {
+        $categoryId = $this->categoryGetIdService->getIdByUuid($productRequest->getCategoryId());
+        $measureId = $this->measureGetIdService->getIdByUuid($productRequest->getMeasureId());
+
         $toEntity = $this->product->transformRequestToEntity($productRequest);
+        $toEntity->setCategoryId($categoryId);
+        $toEntity->setMeasureId($measureId);
+
         return $this->productRepository->addProduct($toEntity);
     }
 

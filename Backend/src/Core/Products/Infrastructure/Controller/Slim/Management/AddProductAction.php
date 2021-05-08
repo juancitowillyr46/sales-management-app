@@ -32,7 +32,6 @@ class AddProductAction extends ProductActionAbstract
      */
     protected function action(): Response
     {
-
         $this->productRequest = new ProductRequest((object)$this->request->getParsedBody());
 
         $this->productUseCase->addProduct($this->productRequest);

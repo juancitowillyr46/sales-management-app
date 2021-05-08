@@ -4,6 +4,7 @@ namespace App\Core\Products\Application\Request;
 use App\Core\Products\Domain\Exception\ProductNotFoundException;
 use App\Core\Products\Domain\Exception\ProductRequestValidateException;
 use App\Core\Products\Domain\Exception\ProductValidateRequestException;
+use App\Shared\Domain\DomainException\DomainFormDataValidateException;
 use Assert\Assertion;
 use Assert\AssertionFailedException;
 use Exception;
@@ -82,22 +83,28 @@ class ProductRequest
      */
     public float $promotionPrice;
 
+    /**
+     * @OA\Property(type="string", example="Lorem Ipsum is simply dummy text")
+     */
+    public string $presentation;
+
     public function __construct(object $requestBody)
     {
 
         $this->validateRequest($requestBody);
 
-        $this->image = $requestBody->image;
-        $this->name = $requestBody->name;
-        $this->price = $requestBody->price;
-        $this->description = $requestBody->description;
-        $this->categoryId = $requestBody->categoryId;
         $this->skuCode = $requestBody->skuCode;
-        $this->measureId = $requestBody->measureId;
-        $this->featured = $requestBody->featured;
+        $this->name = $requestBody->name;
+        $this->description = $requestBody->description;
+        $this->image = $requestBody->image;
+        $this->price = $requestBody->price;
         $this->cost = $requestBody->cost;
         $this->promotionPrice = $requestBody->promotionPrice;
-
+        $this->measureId = $requestBody->measureId;
+        $this->categoryId = $requestBody->categoryId;
+        $this->presentation = $requestBody->presentation;
+        $this->stock = $requestBody->stock;
+        $this->featured = $requestBody->featured;
     }
 
     /**
@@ -276,6 +283,22 @@ class ProductRequest
         $this->promotionPrice = $promotionPrice;
     }
 
+    /**
+     * @return string
+     */
+    public function getPresentation(): string
+    {
+        return $this->presentation;
+    }
+
+    /**
+     * @param string $presentation
+     */
+    public function setPresentation(string $presentation): void
+    {
+        $this->presentation = $presentation;
+    }
+
     public function validateRequest(object $requestBody): void {
 
         $formData = (array)$requestBody;
@@ -326,6 +349,10 @@ class ProductRequest
                 'promotionPrice' => [
                     new Assert\Optional(),
                     new Assert\Type('float')
+                ],
+                'presentation' => [
+                    new Assert\Optional(),
+                    new Assert\Type('string')
                 ]
             ]
         );
@@ -345,8 +372,8 @@ class ProductRequest
                     "message" => $error->getMessage(),
                 ];
             }
-            $d = $lstErrors;
-            throw new ProductRequestValidateException();
+            $d = json_encode($lstErrors);
+            throw new DomainFormDataValidateException($d);
         }
 
     }

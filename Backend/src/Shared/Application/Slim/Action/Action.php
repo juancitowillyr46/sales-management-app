@@ -4,6 +4,7 @@
 namespace App\Shared\Application\Slim\Action;
 
 use App\Shared\Domain\DomainException\DomainRecordNotFoundException;
+use App\Shared\Domain\DomainException\DomainFormDataValidateException;
 use Exception;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -38,6 +39,9 @@ abstract class Action
         } catch (DomainRecordNotFoundException $e) {
             $this->logger->error($e->getMessage());
             throw new HttpNotFoundException($this->request, $e->getMessage());
+        } catch (DomainFormDataValidateException $e) {
+            $this->logger->error($e->getMessage());
+            throw new HttpBadRequestException($this->request, $e->getMessage());
         }
     }
 

@@ -12,22 +12,16 @@ use App\Core\Products\Domain\Service\ResourceServiceInterface;
 class ProductUseCase implements ProductUseCaseInterface
 {
     protected ProductServiceInterface $productService;
-    protected ResourceServiceInterface $categoryGetIdService;
-    protected ResourceServiceInterface $measureGetIdService;
 
-    public function __construct(ProductServiceInterface $productService, ResourceServiceInterface $categoryGetIdService, ResourceServiceInterface $measureGetIdService)
+
+    public function __construct(ProductServiceInterface $productService)
     {
         $this->productService = $productService;
-        $this->categoryGetIdService = $categoryGetIdService;
-        $this->measureGetIdService = $measureGetIdService;
+
     }
 
     public function addProduct(ProductRequest $productRequest): void
     {
-
-        $this->categoryGetIdService->returnIdResource($productRequest->getCategoryId());
-        $this->measureGetIdService->returnIdResource($productRequest->getMeasureId());
-
         $this->productService->addProduct($productRequest);
     }
 

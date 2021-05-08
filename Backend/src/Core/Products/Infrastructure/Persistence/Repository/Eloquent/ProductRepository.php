@@ -13,7 +13,9 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function addProduct(Product $product): bool
     {
-        return true;
+        $productModel = new ProductModel();
+        $productObject = $productModel::create($product->transformEntityToModel($product));
+        return ($productObject->id > 0);
     }
 
     public function editProductById(int $id, Product $product): bool
