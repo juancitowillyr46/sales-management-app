@@ -18,12 +18,12 @@ class BaseEntity implements IBaseEntity
     public string $deletedBy;
 
 
-//    public function __construct()
-//    {
-//        $this->createdBy = date('Y-m-d H:i:s');
-//        $this->updatedBy = date('Y-m-d H:i:s');
-//        $this->deletedBy = date('Y-m-d H:i:s');
-//    }
+    public function __construct()
+    {
+        $this->createdAt = date('Y-m-d H:i:s');
+        $this->updatedAt = date('Y-m-d H:i:s');
+        $this->deletedAt = date('Y-m-d H:i:s');
+    }
 
     /**
      * @return int

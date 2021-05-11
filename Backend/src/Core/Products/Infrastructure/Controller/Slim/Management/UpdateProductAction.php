@@ -18,7 +18,7 @@ class UpdateProductAction extends ProductActionAbstract
      *   operationId="updateProduct",
      *   @OA\Parameter(
      *         name="uuid",
-     *         in="query",
+     *         in="path",
      *         description="Unique resource identifier",
      *         required=true,
      *         @OA\Schema(
@@ -44,7 +44,7 @@ class UpdateProductAction extends ProductActionAbstract
      */
     protected function action(): Response
     {
-        $this->productRequest = new ProductRequest($this->request->getBody());
+        $this->productRequest = new ProductRequest((object)$this->request->getParsedBody());
         $productCode = $this->resolveArg('uuid');
         $this->productUseCase->updateProductByUuid($productCode, $this->productRequest);
 

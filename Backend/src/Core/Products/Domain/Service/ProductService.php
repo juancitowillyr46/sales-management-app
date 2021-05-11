@@ -43,7 +43,14 @@ class ProductService implements ProductServiceInterface
     public function updateProductByUuid(string $uuid, ProductRequest $productRequest): bool
     {
         $this->getIdByUuidProduct($uuid);
+        $categoryId = $this->categoryGetIdService->getIdByUuid($productRequest->getCategoryId());
+        $measureId = $this->measureGetIdService->getIdByUuid($productRequest->getMeasureId());
+
         $toEntity = $this->product->transformRequestToEntity($productRequest);
+        $toEntity->setCategoryId($categoryId);
+        $toEntity->setMeasureId($measureId);
+        $toEntity->setUuid($uuid);
+
         return $this->productRepository->editProductById($this->product->getId(), $toEntity);
     }
 
@@ -52,10 +59,13 @@ class ProductService implements ProductServiceInterface
         $this->getIdByUuidProduct($uuid);
 
         $productEntity = $this->productRepository->findProductById($this->product->getId());
+
         $productDto = new ProductDto();
         $productDto->setUuid($productEntity->getUuid());
         $productDto->setName($productEntity->getName());
         $productDto->setPrice($productEntity->getPrice());
+        $productDto->setImage($productEntity->getImage());
+
         return $productDto;
     }
 
@@ -80,7 +90,7 @@ class ProductService implements ProductServiceInterface
 
     public function getIdByUuidProduct(string $uuid): void
     {
-        $getCode = "c7b659f7-9032-4f14-a19a-54c4a75cb66f";
+        $getCode = "ca809fdc-b199-11eb-a426-00fffff3cb1e";
         if($uuid == $getCode) {
             $this->product->setId(1);
         } else {

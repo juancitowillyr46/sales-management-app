@@ -18,7 +18,7 @@ class DeleteProductAction extends ProductActionAbstract
      *   operationId="deleteProducts",
      *   @OA\Parameter(
      *         name="uuid",
-     *         in="query",
+     *         in="path",
      *         description="Unique resource identifier",
      *         required=true,
      *         @OA\Schema(

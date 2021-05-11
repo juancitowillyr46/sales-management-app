@@ -18,9 +18,11 @@ class Product extends BaseEntity
     public int $stock;
     public float $promotionPrice;
     public string $presentation;
+    public int $stateId;
 
     public function __construct()
     {
+        parent::__construct();
         $this->uuid = $this->generateUuid();
         $this->image = "";
         $this->name = "";
@@ -32,6 +34,7 @@ class Product extends BaseEntity
         $this->featured = false;
         $this->promotionPrice = 0.0;
         $this->presentation = "";
+        $this->stateId = 0;
     }
 
     /**
@@ -225,6 +228,24 @@ class Product extends BaseEntity
     {
         $this->presentation = $presentation;
     }
+
+    /**
+     * @return int
+     */
+    public function getStateId(): int
+    {
+        return $this->stateId;
+    }
+
+    /**
+     * @param int $stateId
+     */
+    public function setStateId(int $stateId): void
+    {
+        $this->stateId = $stateId;
+    }
+
+
 
     public function transformRequestToEntity(ProductRequest $productRequest): Product {
 

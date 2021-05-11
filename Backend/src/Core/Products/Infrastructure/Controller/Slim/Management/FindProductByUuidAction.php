@@ -5,8 +5,6 @@ namespace App\Core\Products\Infrastructure\Controller\Slim\Management;
 
 
 use App\Core\Products\Infrastructure\Controller\Slim\Abstracts\ProductActionAbstract;
-use App\Shared\Application\Slim\Action\ActionError;
-use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 
 class FindProductByUuidAction extends ProductActionAbstract
@@ -18,7 +16,7 @@ class FindProductByUuidAction extends ProductActionAbstract
      *   operationId="FindProductByUuidAction",
      *   @OA\Parameter(
      *         name="uuid",
-     *         in="query",
+     *         in="path",
      *         description="Unique resource identifier",
      *         required=true,
      *         @OA\Schema(
@@ -35,22 +33,8 @@ class FindProductByUuidAction extends ProductActionAbstract
      */
     protected function action(): Response
     {
-
-//        try {
-
-            $productCode = $this->resolveArg('uuid');
-
-            $productDto = $this->productUseCase->findProductByUuid($productCode);
-
-            return $this->respondWithData($productDto, 200);
-
-//        } catch (Exception $e) {
-//
-//            $error = new ActionError(ActionError::RESOURCE_NOT_FOUND, $e->getMessage());
-//
-//            return $this->respondWithData($error, 404);
-//
-//        }
-
+        $productCode = $this->resolveArg('uuid');
+        $productDto = $this->productUseCase->findProductByUuid($productCode);
+        return $this->respondWithData($productDto, 200);
     }
 }
