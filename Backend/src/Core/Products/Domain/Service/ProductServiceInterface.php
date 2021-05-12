@@ -15,6 +15,7 @@ interface ProductServiceInterface
     public function deleteProductByUuid(string $uuid): bool;
     public function findProducts(array $queries): array;
 
-    public function validateExistProductByName(string $name): bool;
-    public function getIdByUuidProduct(string $productCode): void;
+    //public function validateExistProductByName(string $name): bool;
+
+    //public function checkProductByUuid(string $uuid): void;
 }

@@ -245,17 +245,13 @@ class Product extends BaseEntity
         $this->stateId = $stateId;
     }
 
-
-
     public function transformRequestToEntity(ProductRequest $productRequest): Product {
 
         $this->setImage($productRequest->getImage());
         $this->setName($productRequest->getName());
         $this->setPrice($productRequest->getPrice());
         $this->setDescription($productRequest->getDescription());
-        //$this->setCategoryId($productRequest->getCategoryId());
         $this->setSkuCode($productRequest->getSkuCode());
-        //$this->setMeasureId($productRequest->getMeasureId());
         $this->setFeatured($productRequest->getFeatured());
         $this->setCost($productRequest->getCost());
         $this->setPromotionPrice($productRequest->getPromotionPrice());
@@ -286,5 +282,23 @@ class Product extends BaseEntity
         return $fields;
     }
 
+    public function transformModelToEntity(object $productModel): Product {
+        $product = $this;
+        $product->setId($productModel->id);
+        $product->setUuid($productModel->uuid);
+        $product->setName($productModel->name);
+        $product->setSkuCode($productModel->sku_code);
+        $product->setDescription($productModel->description);
+        $product->setImage($productModel->image);
+        $product->setPrice($productModel->price);
+        $product->setCost($productModel->cost);
+        $product->setCategoryId($productModel->category_id);
+        $product->setMeasureId($productModel->measure_id);
+        $product->setPresentation($productModel->presentation);
+        $product->setStock($productModel->stock);
+        $product->setFeatured($productModel->featured);
+        $product->setStateId($productModel->state_id);
+        return $product;
+    }
 }
 

@@ -42,7 +42,7 @@ class ProductService implements ProductServiceInterface
 
     public function updateProductByUuid(string $uuid, ProductRequest $productRequest): bool
     {
-        $this->getIdByUuidProduct($uuid);
+        $this->findProductByUuid($uuid);
         $categoryId = $this->categoryGetIdService->getIdByUuid($productRequest->getCategoryId());
         $measureId = $this->measureGetIdService->getIdByUuid($productRequest->getMeasureId());
 
@@ -56,22 +56,22 @@ class ProductService implements ProductServiceInterface
 
     public function findProductByUuid(string $uuid): ProductDto
     {
-        $this->getIdByUuidProduct($uuid);
+        $product = $this->productRepository->findProductByUuid($uuid);
 
-        $productEntity = $this->productRepository->findProductById($this->product->getId());
+        $this->product = $product;
 
         $productDto = new ProductDto();
-        $productDto->setUuid($productEntity->getUuid());
-        $productDto->setName($productEntity->getName());
-        $productDto->setPrice($productEntity->getPrice());
-        $productDto->setImage($productEntity->getImage());
+        $productDto->setUuid($this->product->getUuid());
+        $productDto->setName($this->product->getName());
+        $productDto->setPrice($this->product->getPrice());
+        $productDto->setImage($this->product->getImage());
 
         return $productDto;
     }
 
     public function deleteProductByUuid(string $uuid): bool
     {
-        $this->getIdByUuidProduct($uuid);
+        $this->findProductByUuid($uuid);
         return $this->productRepository->deleteProductById($this->product->getId());
     }
 
@@ -80,21 +80,4 @@ class ProductService implements ProductServiceInterface
         return $this->productRepository->findProducts($queries);
     }
 
-    public function validateExistProductByName(string $name): bool
-    {
-        if($name == 'Product') {
-            throw new ProductExistException();
-        }
-        return true;
-    }
-
-    public function getIdByUuidProduct(string $uuid): void
-    {
-        $getCode = "ca809fdc-b199-11eb-a426-00fffff3cb1e";
-        if($uuid == $getCode) {
-            $this->product->setId(1);
-        } else {
-            throw new ProductNotFoundException();
-        }
-    }
 }

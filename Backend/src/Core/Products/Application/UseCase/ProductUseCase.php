@@ -12,7 +12,7 @@ use App\Core\Products\Domain\Service\ResourceServiceInterface;
 class ProductUseCase implements ProductUseCaseInterface
 {
     protected ProductServiceInterface $productService;
-
+    //protected ProductRequest $productRequest;
 
     public function __construct(ProductServiceInterface $productService)
     {
@@ -27,11 +27,16 @@ class ProductUseCase implements ProductUseCaseInterface
 
     public function updateProductByUuid(string $uuid, ProductRequest $productRequest): void
     {
+        //$productRequest->validateArgUuid($uuid);
+
         $this->productService->updateProductByUuid($uuid, $productRequest);
     }
 
     public function findProductByUuid(string $uuid): ProductDto
     {
+        //$productRequest = new ProductRequest();
+        //$productRequest->validateArgUuid($uuid);
+
         return $this->productService->findProductByUuid($uuid);
     }
 

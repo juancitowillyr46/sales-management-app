@@ -372,9 +372,32 @@ class ProductRequest
                     "message" => $error->getMessage(),
                 ];
             }
-            $d = json_encode($lstErrors);
-            throw new DomainFormDataValidateException($d);
+            $errors = json_encode($lstErrors);
+            throw new DomainFormDataValidateException($errors);
         }
 
+    }
+
+    public function validateArgUuid(string $argUuid) {
+
+        $formData = [
+            'uuid' => $argUuid
+        ];
+
+        $validator = Validation::createValidator();
+        $constraint = new Assert\Collection(
+            [
+                'uuid' => [
+                    new Assert\Uuid()
+                ]
+            ]
+        );
+        $violations = $validator->validate($formData, $constraint);
+
+        $validationResult = SymfonyValidationConverter::createValidationResult($violations);
+
+        if ($validationResult->fails()) {
+            throw new ProductNotFoundException();
+        }
     }
 }

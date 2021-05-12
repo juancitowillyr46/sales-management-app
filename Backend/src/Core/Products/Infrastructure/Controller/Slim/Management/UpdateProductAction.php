@@ -14,16 +14,16 @@ class UpdateProductAction extends ProductActionAbstract
     /**
      * @OA\Put(
      *   tags={"Product"},
-     *   path="/products/{uuid}",
-     *   operationId="updateProduct",
+     *   path="/products/{id}",
+     *   operationId="updateProductById",
      *   @OA\Parameter(
-     *         name="uuid",
+     *         name="id",
      *         in="path",
-     *         description="Unique resource identifier",
+     *         description="Id product",
      *         required=true,
      *         @OA\Schema(
      *           type="string",
-     *           @OA\Items(type="string"),
+     *           @OA\Items(type="uuid"),
      *         ),
      *         style="form"
      *    ),

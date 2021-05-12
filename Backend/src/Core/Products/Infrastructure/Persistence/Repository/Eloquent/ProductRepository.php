@@ -5,17 +5,19 @@ namespace App\Core\Products\Infrastructure\Persistence\Repository\Eloquent;
 
 
 use App\Core\Products\Domain\Entity\Product;
+use App\Core\Products\Domain\Exception\ProductNotFoundException;
 use App\Core\Products\Domain\Repository\ProductRepositoryInterface;
 
 
 class ProductRepository implements ProductRepositoryInterface
 {
-
     protected ProductModel $productModel;
+    protected Product $product;
 
     public function __construct()
     {
         $this->productModel = new ProductModel();
+        $this->product = new Product();
     }
 
     public function addProduct(Product $product): bool
@@ -33,43 +35,8 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function findProductById(int $id): Product
     {
-
         $productModel = $this->productModel::find($id);
-
-        $product = new Product();
-        $product->setName($productModel->name);
-        $product->setSkuCode($productModel->sku_code);
-        $product->setDescription($productModel->description);
-        $product->setImage($productModel->image);
-        $product->setPrice($productModel->price);
-        $product->setCost($productModel->cost);
-        $product->setCategoryId($productModel->category_id);
-        $product->setMeasureId($productModel->measure_id);
-        $product->setPresentation($productModel->presentation);
-        $product->setStock($productModel->stock);
-        $product->setFeatured($productModel->featured);
-        $product->setStateId($productModel->state_id);
-
-        return $product;
-    }
-
-    public function findProductByIdList(object $productModel): Product
-    {
-        $product = new Product();
-        $product->setName($productModel->name);
-        $product->setSkuCode($productModel->sku_code);
-        $product->setDescription($productModel->description);
-        $product->setImage($productModel->image);
-        $product->setPrice($productModel->price);
-        $product->setCost($productModel->cost);
-        $product->setCategoryId($productModel->category_id);
-        $product->setMeasureId($productModel->measure_id);
-        $product->setPresentation($productModel->presentation);
-        $product->setStock($productModel->stock);
-        $product->setFeatured($productModel->featured);
-        $product->setStateId($productModel->state_id);
-
-        return $product;
+        return $this->product->transformModelToEntity($productModel);
     }
 
     public function deleteProductById(int $id): bool
@@ -83,8 +50,17 @@ class ProductRepository implements ProductRepositoryInterface
         $lstProducts = [];
         $lst = $this->productModel::all()->toArray();
         foreach ($lst as $item) {
-            $lstProducts[] = $this->findProductByIdList((object)$item);
+            $lstProducts[] = $this->product->transformModelToEntity((object)$item);
         }
         return $lstProducts;
+    }
+
+    public function findProductByUuid(string $uuid): Product
+    {
+        $productModel = $this->productModel::where("uuid", "=", $uuid)->first();
+        if(is_null($productModel)) {
+            throw new ProductNotFoundException();
+        }
+        return $this->product->transformModelToEntity((object)$productModel);
     }
 }

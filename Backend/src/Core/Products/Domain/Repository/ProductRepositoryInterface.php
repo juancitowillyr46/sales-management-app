@@ -14,4 +14,6 @@ interface ProductRepositoryInterface
     public function findProductById(int $id): Product;
     public function deleteProductById(int $id): bool;
     public function findProducts(array $queries): array;
+
+    public function findProductByUuid(string $uuid): Product;
 }
