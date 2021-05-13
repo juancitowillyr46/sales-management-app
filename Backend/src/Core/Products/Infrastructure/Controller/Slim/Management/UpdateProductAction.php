@@ -45,7 +45,7 @@ class UpdateProductAction extends ProductActionAbstract
     protected function action(): Response
     {
         $this->productRequest = new ProductRequest((object)$this->request->getParsedBody());
-        $productCode = $this->resolveArg('uuid');
+        $productCode = $this->resolveArg('id');
         $this->productUseCase->updateProductByUuid($productCode, $this->productRequest);
 
         return $this->respondWithData(new StdClass(), 200);

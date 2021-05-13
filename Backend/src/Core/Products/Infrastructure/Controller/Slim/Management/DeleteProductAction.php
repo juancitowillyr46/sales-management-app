@@ -35,7 +35,7 @@ class DeleteProductAction extends ProductActionAbstract
      */
     protected function action(): Response
     {
-        $productCode = $this->resolveArg('uuid');
+        $productCode = $this->resolveArg('id');
 
         $this->productUseCase->deleteProductByUuid($productCode);
 

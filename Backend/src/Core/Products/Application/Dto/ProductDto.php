@@ -5,30 +5,33 @@ namespace App\Core\Products\Application\Dto;
 
 class ProductDto
 {
-    public int $id;
-    public string $uuid;
-    public string $name;
-    public string $description;
+    public string $id;
     public string $image;
+    public string $name;
     public float $price;
-    public int $category;
-    public string $barcode;
-    public int $unitOfMeasurement;
-    public int $featuredProduct;
+    public float $promotionPrice;
+    public string $categoryId;
+    public string $description;
+    public string $skuCode;
     public float $cost;
+    public string $measureId;
+    public bool $featured;
+    public int $stock;
+    public CategoryDto $category;
+    public MeasureDto $measure;
 
     /**
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param int $id
+     * @param string $id
      */
-    public function setId(int $id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
@@ -36,17 +39,17 @@ class ProductDto
     /**
      * @return string
      */
-    public function getUuid(): string
+    public function getImage(): string
     {
-        return $this->uuid;
+        return $this->image;
     }
 
     /**
-     * @param string $uuid
+     * @param string $image
      */
-    public function setUuid(string $uuid): void
+    public function setImage(string $image): void
     {
-        $this->uuid = $uuid;
+        $this->image = $image;
     }
 
     /**
@@ -63,6 +66,54 @@ class ProductDto
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function setPrice(float $price): void
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPromotionPrice(): float
+    {
+        return $this->promotionPrice;
+    }
+
+    /**
+     * @param float $promotionPrice
+     */
+    public function setPromotionPrice(float $promotionPrice): void
+    {
+        $this->promotionPrice = $promotionPrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryId(): string
+    {
+        return $this->categoryId;
+    }
+
+    /**
+     * @param string $categoryId
+     */
+    public function setCategoryId(string $categoryId): void
+    {
+        $this->categoryId = $categoryId;
     }
 
     /**
@@ -84,97 +135,17 @@ class ProductDto
     /**
      * @return string
      */
-    public function getImage(): string
+    public function getSkuCode(): string
     {
-        return $this->image;
+        return $this->skuCode;
     }
 
     /**
-     * @param string $image
+     * @param string $skuCode
      */
-    public function setImage(string $image): void
+    public function setSkuCode(string $skuCode): void
     {
-        $this->image = $image;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPrice(): float
-    {
-        return $this->price;
-    }
-
-    /**
-     * @param float $price
-     */
-    public function setPrice(float $price): void
-    {
-        $this->price = $price;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCategory(): int
-    {
-        return $this->category;
-    }
-
-    /**
-     * @param int $category
-     */
-    public function setCategory(int $category): void
-    {
-        $this->category = $category;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBarcode(): string
-    {
-        return $this->barcode;
-    }
-
-    /**
-     * @param string $barcode
-     */
-    public function setBarcode(string $barcode): void
-    {
-        $this->barcode = $barcode;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUnitOfMeasurement(): int
-    {
-        return $this->unitOfMeasurement;
-    }
-
-    /**
-     * @param int $unitOfMeasurement
-     */
-    public function setUnitOfMeasurement(int $unitOfMeasurement): void
-    {
-        $this->unitOfMeasurement = $unitOfMeasurement;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFeaturedProduct(): int
-    {
-        return $this->featuredProduct;
-    }
-
-    /**
-     * @param int $featuredProduct
-     */
-    public function setFeaturedProduct(int $featuredProduct): void
-    {
-        $this->featuredProduct = $featuredProduct;
+        $this->skuCode = $skuCode;
     }
 
     /**
@@ -191,6 +162,86 @@ class ProductDto
     public function setCost(float $cost): void
     {
         $this->cost = $cost;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMeasureId(): string
+    {
+        return $this->measureId;
+    }
+
+    /**
+     * @param string $measureId
+     */
+    public function setMeasureId(string $measureId): void
+    {
+        $this->measureId = $measureId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFeatured(): bool
+    {
+        return $this->featured;
+    }
+
+    /**
+     * @param bool $featured
+     */
+    public function setFeatured(bool $featured): void
+    {
+        $this->featured = $featured;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStock(): int
+    {
+        return $this->stock;
+    }
+
+    /**
+     * @param int $stock
+     */
+    public function setStock(int $stock): void
+    {
+        $this->stock = $stock;
+    }
+
+    /**
+     * @return CategoryDto
+     */
+    public function getCategory(): CategoryDto
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param CategoryDto $category
+     */
+    public function setCategory(CategoryDto $category): void
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @return MeasureDto
+     */
+    public function getMeasure(): MeasureDto
+    {
+        return $this->measure;
+    }
+
+    /**
+     * @param MeasureDto $measure
+     */
+    public function setMeasure(MeasureDto $measure): void
+    {
+        $this->measure = $measure;
     }
 
 }

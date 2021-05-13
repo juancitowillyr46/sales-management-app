@@ -11,7 +11,7 @@ use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
-    $app->options('/{routes:.*}', function (Request $request, Response $response) {
+    $app->options('/{routes:.+}', function (Request $request, Response $response) {
         // CORS Pre-Flight OPTIONS Request Handler
         return $response;
     });
@@ -19,11 +19,12 @@ return function (App $app) {
         $response->getBody()->write('Hello, World!');
         return $response;
     });
+
     $app->group('/products', function (Group $group) {
         $group->get('', FindProductsAction::class);
         $group->post('', AddProductAction::class);
-        $group->get('/{uuid}', FindProductByUuidAction::class);
-        $group->put('/{uuid}', UpdateProductAction::class);
-        $group->delete('/{uuid}', DeleteProductAction::class);
+        $group->get('/{id}', FindProductByUuidAction::class);
+        $group->put('/{id}', UpdateProductAction::class);
+        $group->delete('/{id}', DeleteProductAction::class);
     });
 };

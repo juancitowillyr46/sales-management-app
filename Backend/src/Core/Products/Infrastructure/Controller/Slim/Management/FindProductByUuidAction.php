@@ -33,7 +33,7 @@ class FindProductByUuidAction extends ProductActionAbstract
      */
     protected function action(): Response
     {
-        $productCode = $this->resolveArg('uuid');
+        $productCode = $this->resolveArg('id');
         $productDto = $this->productUseCase->findProductByUuid($productCode);
         return $this->respondWithData($productDto, 200);
     }

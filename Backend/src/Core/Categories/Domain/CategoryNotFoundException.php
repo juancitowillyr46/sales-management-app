@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\Products\Domain\Exception;
+namespace App\Core\Categories\Domain;
 
 
 use App\Shared\Domain\DomainException\DomainRecordNotFoundException;

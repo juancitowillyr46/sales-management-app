@@ -4,6 +4,8 @@
 namespace App\Core\Products\Domain\Service;
 
 
+use App\Core\Products\Application\Dto\CategoryDto;
+use App\Core\Products\Application\Dto\MeasureDto;
 use App\Core\Products\Application\Dto\ProductDto;
 use App\Core\Products\Application\Request\ProductRequest;
 use App\Core\Products\Domain\Entity\Product;
@@ -61,10 +63,27 @@ class ProductService implements ProductServiceInterface
         $this->product = $product;
 
         $productDto = new ProductDto();
-        $productDto->setUuid($this->product->getUuid());
+        $productDto->setId($this->product->getUuid());
+        $productDto->setImage($this->product->getImage());
         $productDto->setName($this->product->getName());
         $productDto->setPrice($this->product->getPrice());
-        $productDto->setImage($this->product->getImage());
+        $productDto->setPromotionPrice($this->product->getPromotionPrice());
+
+        $measure = new MeasureDto();
+        $measure->setId('24357ac9-729b-4d78-9638-7e1f653cdf57');
+        $measure->setName('UNIDAD');
+
+        $productDto->setMeasure($measure);
+        $productDto->setDescription($this->product->getDescription());
+        $productDto->setSkuCode($this->product->getSkuCode());
+        $productDto->setCost($this->product->getCost());
+        $productDto->setFeatured($this->product->getFeatured());
+        $productDto->setStock($this->product->getStock());
+
+        $category = new CategoryDto();
+        $category->setId('012b637a-702a-4643-92f1-23fc8bb11a95');
+        $category->setName('CATEGORIA A');
+        $productDto->setCategory($category);
 
         return $productDto;
     }
