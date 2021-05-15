@@ -16,7 +16,11 @@
         "selective/validation": "^1.1",
         "ext-json": "*",
         "selective/config": "^1.1",
-        "slim/psr7": "^1.3"
+        "slim/psr7": "^1.3",
+      "ext-pdo": "*",
+        "monolog/monolog": "^2.2",
+        "zircote/swagger-php": "^3.1",
+        "illuminate/database": "^8.40"
     },
     "description": "",
     "autoload": {

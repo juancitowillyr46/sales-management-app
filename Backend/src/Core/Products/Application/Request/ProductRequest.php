@@ -1,65 +1,99 @@
 <?php
 namespace App\Core\Products\Application\Request;
 
-use App\Core\Products\Domain\Exception\ProductValidateRequestException;
-use Assert\Assertion;
-use Assert\AssertionFailedException;
-use Exception;
+use App\Core\Products\Domain\Exception\ProductNotFoundException;
+use App\Shared\Domain\DomainException\DomainFormDataValidateException;
 use Selective\Validation\Converter\SymfonyValidationConverter;
-use Selective\Validation\Exception\ValidationException;
-use Selective\Validation\ValidationResult;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Validator\RecursiveValidator;
-use Symfony\Component\Validator\Validator\TraceableValidator;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Validator\ValidatorBuilder;
 
+/**
+ * @OA\Schema(
+ *     schema="Product",
+ *     title="Product",
+ *     description="Request Product",
+ *     required={"name", "price"}
+ * )
+ */
 class ProductRequest
 {
-    public string $uuid;
+    /**
+     * @OA\Property(type="string", example="http://w.image.com")
+     */
     public string $image;
+
+    /**
+         * @OA\Property(type="string", example="Tornillo")
+     */
     public string $name;
+
+    /**
+     * @OA\Property(type="number", example="99.9")
+     */
     public float $price;
+
+    /**
+     * @OA\Property(type="string", example="Lorem Ipsum is simply dummy text of the printing and typesetting industry")
+     */
     public string $description;
-    public int $category;
+
+    /**
+     * @OA\Property(type="string", example="b075dbf1-6d06-4915-9367-982b59769d82")
+     */
+    public string $categoryId;
+
+    /**
+     * @OA\Property(type="string", example="TSH-MED-WHI-COT")
+     */
     public string $skuCode;
-    public int $unitOfMeasurement;
+
+    /**
+     * @OA\Property(type="string", example="cad2a220-d411-4c07-8056-c027b2be6d6e")
+     */
+    public string $measureId;
+
+    /**
+     * @OA\Property(type="boolean", example="true")
+     */
     public bool $featured;
+
+    /**
+     * @OA\Property(type="number", example="9.99")
+     */
     public float $cost;
+
+    /**
+     * @OA\Property(type="integer", example="9")
+     */
     public int $stock;
+
+    /**
+     * @OA\Property(type="number", example="9.99")
+     */
     public float $promotionPrice;
+
+    /**
+     * @OA\Property(type="string", example="Lorem Ipsum is simply dummy text")
+     */
+    public string $presentation;
 
     public function __construct(object $requestBody)
     {
+
         $this->validateRequest($requestBody);
-        $this->uuid = $requestBody->uuid;
-        $this->image = $requestBody->image;
-        $this->name = $requestBody->name;
-        $this->price = $requestBody->price;
-        $this->description = $requestBody->description;
-        $this->category = $requestBody->category;
+
         $this->skuCode = $requestBody->skuCode;
-        $this->unitOfMeasurement = $requestBody->unitOfMeasurement;
-        $this->featured = $requestBody->featured;
+        $this->name = $requestBody->name;
+        $this->description = $requestBody->description;
+        $this->image = $requestBody->image;
+        $this->price = $requestBody->price;
         $this->cost = $requestBody->cost;
         $this->promotionPrice = $requestBody->promotionPrice;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
+        $this->measureId = $requestBody->measureId;
+        $this->categoryId = $requestBody->categoryId;
+        $this->presentation = $requestBody->presentation;
+        $this->stock = $requestBody->stock;
+        $this->featured = $requestBody->featured;
     }
 
     /**
@@ -127,19 +161,19 @@ class ProductRequest
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getCategory(): int
+    public function getCategoryId(): string
     {
-        return $this->category;
+        return $this->categoryId;
     }
 
     /**
-     * @param int $category
+     * @param string $categoryId
      */
-    public function setCategory(int $category): void
+    public function setCategory(string $categoryId): void
     {
-        $this->category = $category;
+        $this->categoryId = $categoryId;
     }
 
     /**
@@ -159,19 +193,19 @@ class ProductRequest
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getUnitOfMeasurement(): int
+    public function getMeasureId(): string
     {
-        return $this->unitOfMeasurement;
+        return $this->measureId;
     }
 
     /**
-     * @param int $unitOfMeasurement
+     * @param string $measureId
      */
-    public function setUnitOfMeasurement(int $unitOfMeasurement): void
+    public function setMeasureId(string $measureId): void
     {
-        $this->unitOfMeasurement = $unitOfMeasurement;
+        $this->measureId = $measureId;
     }
 
     /**
@@ -238,6 +272,22 @@ class ProductRequest
         $this->promotionPrice = $promotionPrice;
     }
 
+    /**
+     * @return string
+     */
+    public function getPresentation(): string
+    {
+        return $this->presentation;
+    }
+
+    /**
+     * @param string $presentation
+     */
+    public function setPresentation(string $presentation): void
+    {
+        $this->presentation = $presentation;
+    }
+
     public function validateRequest(object $requestBody): void {
 
         $formData = (array)$requestBody;
@@ -246,10 +296,6 @@ class ProductRequest
 
         $constraint = new Assert\Collection(
             [
-                'uuid' => [
-                    new Assert\Optional(),
-                    new Assert\Uuid()
-                ],
                 'image' => [
                     new Assert\Optional(),
                     new Assert\Url()
@@ -261,19 +307,42 @@ class ProductRequest
                     new Assert\Required(),
                     new Assert\Type('float')
                 ],
-                'description' => new Assert\Optional(),
-                'category' => new Assert\Optional(),
+                'description' => [
+                    new Assert\Optional(),
+                    new Assert\Length([
+                        'min' => 0,
+                        'max' => 250
+                    ])
+                ],
+                'categoryId' => [
+                    new Assert\Optional(),
+                    new Assert\Uuid()
+                ] ,
                 'skuCode' => new Assert\Optional(),
-                'unitOfMeasurement' => new Assert\Optional(),
+                'measureId' => [
+                    new Assert\Optional(),
+                    new Assert\Uuid()
+                ],
                 'featured' => [
                     new Assert\Optional(),
                     new Assert\Type('bool')
                 ],
                 'cost' => [
                     new Assert\Optional(),
-                    new Assert\Type('float','El costo debe ser 0.0')
+                    new Assert\Type('float')
                 ],
-                'promotionPrice' => new Assert\Optional(),
+                'stock' => [
+                    new Assert\Required(),
+                    new Assert\Type('int')
+                ],
+                'promotionPrice' => [
+                    new Assert\Optional(),
+                    new Assert\Type('float')
+                ],
+                'presentation' => [
+                    new Assert\Optional(),
+                    new Assert\Type('string')
+                ]
             ]
         );
 
@@ -292,26 +361,32 @@ class ProductRequest
                     "message" => $error->getMessage(),
                 ];
             }
-
-            throw new ProductValidateRequestException($lstErrors);
+            $errors = json_encode($lstErrors);
+            throw new DomainFormDataValidateException($errors);
         }
 
     }
 
-    /**
-     * @return string
-     */
-    public function getUuid(): string
-    {
-        return $this->uuid;
-    }
+    public function validateArgUuid(string $argUuid) {
 
-    /**
-     * @param string $uuid
-     */
-    public function setUuid(string $uuid): void
-    {
-        $this->uuid = $uuid;
-    }
+        $formData = [
+            'uuid' => $argUuid
+        ];
 
+        $validator = Validation::createValidator();
+        $constraint = new Assert\Collection(
+            [
+                'uuid' => [
+                    new Assert\Uuid()
+                ]
+            ]
+        );
+        $violations = $validator->validate($formData, $constraint);
+
+        $validationResult = SymfonyValidationConverter::createValidationResult($violations);
+
+        if ($validationResult->fails()) {
+            throw new ProductNotFoundException();
+        }
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Core\Products\Domain\Entity;
 
+use App\Core\Products\Application\Dto\ProductDto;
 use App\Core\Products\Application\Request\ProductRequest;
 use App\Shared\Domain\Entity\BaseEntity;
 
@@ -10,25 +11,32 @@ class Product extends BaseEntity
     public string $description;
     public string $image;
     public float $price;
-    public int $category;
+    public int $categoryId;
     public string $skuCode;
-    public int $unitOfMeasurement;
+    public int $measureId;
     public bool $featured;
     public float $cost;
     public int $stock;
     public float $promotionPrice;
+    public string $presentation;
+    public int $stateId;
 
     public function __construct()
     {
-
+        parent::__construct();
         $this->uuid = $this->generateUuid();
-        $this->promotionPrice = 0;
-        $this->category = 0;
+        $this->image = "";
+        $this->name = "";
         $this->description = "";
+        $this->categoryId = 0;
         $this->skuCode = "";
-        $this->cost = 0;
-        $this->unitOfMeasurement = 0;
+        $this->cost = 0.0;
+        $this->measureId = 0;
         $this->featured = false;
+        $this->promotionPrice = 0.0;
+        $this->presentation = "";
+        $this->stateId = 0;
+        $this->price = 0.0;
     }
 
     /**
@@ -98,17 +106,17 @@ class Product extends BaseEntity
     /**
      * @return int
      */
-    public function getCategory(): int
+    public function getCategoryId(): int
     {
-        return $this->category;
+        return $this->categoryId;
     }
 
     /**
-     * @param int $category
+     * @param int $categoryId
      */
-    public function setCategory(int $category): void
+    public function setCategoryId(int $categoryId): void
     {
-        $this->category = $category;
+        $this->categoryId = $categoryId;
     }
 
     /**
@@ -130,17 +138,17 @@ class Product extends BaseEntity
     /**
      * @return int
      */
-    public function getUnitOfMeasurement(): int
+    public function getMeasureId(): int
     {
-        return $this->unitOfMeasurement;
+        return $this->measureId;
     }
 
     /**
-     * @param int $unitOfMeasurement
+     * @param int $measureId
      */
-    public function setUnitOfMeasurement(int $unitOfMeasurement): void
+    public function setMeasureId(int $measureId): void
     {
-        $this->unitOfMeasurement = $unitOfMeasurement;
+        $this->measureId = $measureId;
     }
 
     /**
@@ -207,13 +215,103 @@ class Product extends BaseEntity
         $this->promotionPrice = $promotionPrice;
     }
 
+    /**
+     * @return string
+     */
+    public function getPresentation(): string
+    {
+        return $this->presentation;
+    }
+
+    /**
+     * @param string $presentation
+     */
+    public function setPresentation(string $presentation): void
+    {
+        $this->presentation = $presentation;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStateId(): int
+    {
+        return $this->stateId;
+    }
+
+    /**
+     * @param int $stateId
+     */
+    public function setStateId(int $stateId): void
+    {
+        $this->stateId = $stateId;
+    }
+
     public function transformRequestToEntity(ProductRequest $productRequest): Product {
-        $this->setUuid($productRequest->getUuid());
+
         $this->setImage($productRequest->getImage());
         $this->setName($productRequest->getName());
         $this->setPrice($productRequest->getPrice());
+        $this->setDescription($productRequest->getDescription());
+        $this->setSkuCode($productRequest->getSkuCode());
+        $this->setFeatured($productRequest->getFeatured());
+        $this->setCost($productRequest->getCost());
+        $this->setPromotionPrice($productRequest->getPromotionPrice());
+        $this->setStock($productRequest->getStock());
+        $this->setPresentation($productRequest->getPresentation());
+
         return $this;
     }
 
+    public function transformEntityToModel(Product $product): array {
+        $fields = [
+            'uuid' => $product->getUuid(),
+            'sku_code' => $product->getSkuCode(),
+            'description' => $product->getDescription(),
+            'name' => $product->getName(),
+            'image' => $product->getImage(),
+            'price' => $product->getPrice(),
+            'cost' => $product->getCost(),
+            'promotion_price' => $product->getPromotionPrice(),
+            'measure_id' => $product->getMeasureId(),
+            'category_id' => $product->getCategoryId(),
+            'presentation'=> $product->getPresentation(),
+            'stock' => $product->getStock(),
+            'featured' => $product->getFeatured(),
+            'state_id' => 1,
+            'created_by' => 'JUAN'
+        ];
+        return $fields;
+    }
+
+    public function transformModelToEntity(object $productModel): Product {
+        $product = $this;
+        $product->setId($productModel->id);
+        $product->setUuid($productModel->uuid);
+        $product->setName($productModel->name);
+        $product->setSkuCode($productModel->sku_code);
+        $product->setDescription($productModel->description);
+        $product->setImage($productModel->image);
+        $product->setPrice($productModel->price);
+        $product->setCost($productModel->cost);
+        $product->setCategoryId($productModel->category_id);
+        $product->setMeasureId($productModel->measure_id);
+        $product->setPresentation($productModel->presentation);
+        $product->setStock($productModel->stock);
+        $product->setFeatured($productModel->featured);
+        $product->setStateId($productModel->state_id);
+        return $product;
+    }
+
+    public function transformEntityToDtoPaginate(Product $product):ProductDto {
+        //$product = $this;
+        $productDto = new ProductDto();
+        $productDto->setId($product->getUuid());
+        $productDto->setImage($product->getImage());
+        $productDto->setName($product->getName());
+        $productDto->setPrice($product->getPrice());
+        $productDto->setPromotionPrice($product->getPromotionPrice());
+        return $productDto;
+    }
 }
 

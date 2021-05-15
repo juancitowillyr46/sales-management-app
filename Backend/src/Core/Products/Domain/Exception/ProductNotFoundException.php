@@ -3,13 +3,9 @@
 namespace App\Core\Products\Domain\Exception;
 
 
-use Exception;
-use Throwable;
+use App\Shared\Domain\DomainException\DomainRecordNotFoundException;
 
-class ProductNotFoundException extends Exception
+class ProductNotFoundException extends DomainRecordNotFoundException
 {
-    public function __construct($message = "", $code = 0, Throwable $previous = null)
-    {
-        parent::__construct("PRODUCT NOT FOUND", 001, $previous);
-    }
+    protected $message = "PRODUCT NOT FOUND";
 }
