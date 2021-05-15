@@ -6,6 +6,8 @@ namespace App\Core\Products\Domain\Repository;
 
 
 use App\Core\Products\Domain\Entity\Product;
+use App\Core\Products\Domain\Entity\ProductPaginateParams;
+use App\Core\Products\Domain\Entity\ProductPaginateResponse;
 
 interface ProductRepositoryInterface
 {
@@ -13,7 +15,7 @@ interface ProductRepositoryInterface
     public function editProductById(int $id, Product $product): bool;
     public function findProductById(int $id): Product;
     public function deleteProductById(int $id): bool;
-    public function findProducts(array $queries): array;
+    public function findProducts(ProductPaginateParams $queries): ProductPaginateResponse;
 
     public function findProductByUuid(string $uuid): Product;
 }

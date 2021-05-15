@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\Products\Application\Dto;
+namespace App\Core\Measures\Application;
 
 
 class MeasureDto

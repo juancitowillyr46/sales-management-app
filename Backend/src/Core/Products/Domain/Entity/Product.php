@@ -1,6 +1,7 @@
 <?php
 namespace App\Core\Products\Domain\Entity;
 
+use App\Core\Products\Application\Dto\ProductDto;
 use App\Core\Products\Application\Request\ProductRequest;
 use App\Shared\Domain\Entity\BaseEntity;
 
@@ -35,6 +36,7 @@ class Product extends BaseEntity
         $this->promotionPrice = 0.0;
         $this->presentation = "";
         $this->stateId = 0;
+        $this->price = 0.0;
     }
 
     /**
@@ -299,6 +301,17 @@ class Product extends BaseEntity
         $product->setFeatured($productModel->featured);
         $product->setStateId($productModel->state_id);
         return $product;
+    }
+
+    public function transformEntityToDtoPaginate(Product $product):ProductDto {
+        //$product = $this;
+        $productDto = new ProductDto();
+        $productDto->setId($product->getUuid());
+        $productDto->setImage($product->getImage());
+        $productDto->setName($product->getName());
+        $productDto->setPrice($product->getPrice());
+        $productDto->setPromotionPrice($product->getPromotionPrice());
+        return $productDto;
     }
 }
 

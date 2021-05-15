@@ -5,6 +5,8 @@ namespace App\Core\Products\Infrastructure\Persistence\Repository\Eloquent;
 
 
 use App\Core\Products\Domain\Entity\Product;
+use App\Core\Products\Domain\Entity\ProductPaginateParams;
+use App\Core\Products\Domain\Entity\ProductPaginateResponse;
 use App\Core\Products\Domain\Exception\ProductNotFoundException;
 use App\Core\Products\Domain\Repository\ProductRepositoryInterface;
 
@@ -45,14 +47,26 @@ class ProductRepository implements ProductRepositoryInterface
         return ($productModel->delete());
     }
 
-    public function findProducts(array $queries): array
+    public function findProducts(ProductPaginateParams $queries): ProductPaginateResponse
     {
+
         $lstProducts = [];
-        $lst = $this->productModel::all()->toArray();
+        $lst = $this->productModel::all()->sortByDesc('id')
+            ->skip(($queries->getSize() - 1) * $queries->getSize())
+            ->take( $queries->getPage())
+            ->toArray();
+
         foreach ($lst as $item) {
             $lstProducts[] = $this->product->transformModelToEntity((object)$item);
         }
-        return $lstProducts;
+
+        $paginate = new ProductPaginateResponse();
+        $paginate->setRows(array_values($lstProducts));
+        $paginate->setTotalRows($this->productModel::all()->count());
+        $paginate->setTotalPages(ceil($this->productModel::all()->count()/$queries->getSize()));
+        $paginate->setCurrentPage($queries->getPage());
+
+        return $paginate;
     }
 
     public function findProductByUuid(string $uuid): Product

@@ -2,21 +2,10 @@
 namespace App\Core\Products\Application\Request;
 
 use App\Core\Products\Domain\Exception\ProductNotFoundException;
-use App\Core\Products\Domain\Exception\ProductRequestValidateException;
-use App\Core\Products\Domain\Exception\ProductValidateRequestException;
 use App\Shared\Domain\DomainException\DomainFormDataValidateException;
-use Assert\Assertion;
-use Assert\AssertionFailedException;
-use Exception;
 use Selective\Validation\Converter\SymfonyValidationConverter;
-use Selective\Validation\Exception\ValidationException;
-use Selective\Validation\ValidationResult;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Validator\RecursiveValidator;
-use Symfony\Component\Validator\Validator\TraceableValidator;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Validator\ValidatorBuilder;
 
 /**
  * @OA\Schema(

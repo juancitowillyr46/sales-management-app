@@ -28,4 +28,16 @@ class CategoryService implements CategoryServiceInterface
 
         return $categoryDto;
     }
+
+    public function findCategoryById(int $id): CategoryDto
+    {
+        $category = $this->categoryRepository->findCategoryById($id);
+        $this->categoryEntity = $category;
+
+        $categoryDto = new CategoryDto();
+        $categoryDto->setId($this->categoryEntity->getUuid());
+        $categoryDto->setName($this->categoryEntity->getName());
+
+        return $categoryDto;
+    }
 }

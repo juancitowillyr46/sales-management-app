@@ -4,34 +4,51 @@
 namespace App\Core\Products\Domain\Service;
 
 
-use App\Core\Products\Application\Dto\CategoryDto;
-use App\Core\Products\Application\Dto\MeasureDto;
+use App\Core\Categories\Domain\CategoryServiceInterface;
+use App\Core\Measures\Domain\MeasureServiceInterface;
+//use App\Core\Products\Application\Dto\CategoryDto;
+//use App\Core\Products\Application\Dto\MeasureDto;
 use App\Core\Products\Application\Dto\ProductDto;
 use App\Core\Products\Application\Request\ProductRequest;
 use App\Core\Products\Domain\Entity\Product;
+use App\Core\Products\Domain\Entity\ProductPaginateParams;
+use App\Core\Products\Domain\Entity\ProductPaginateResponse;
 use App\Core\Products\Domain\Exception\ProductExistException;
 use App\Core\Products\Domain\Exception\ProductNotFoundException;
 use App\Core\Products\Domain\Repository\ProductRepositoryInterface;
+use App\Shared\Helpers\PaginateParams;
 
 class ProductService implements ProductServiceInterface
 {
 
     protected ProductRepositoryInterface $productRepository;
+    protected CategoryServiceInterface $categoryService;
+    protected MeasureServiceInterface $measureService;
+
     protected ResourceServiceInterface $categoryGetIdService;
     protected ResourceServiceInterface $measureGetIdService;
     protected Product $product;
 
-    public function __construct(ProductRepositoryInterface $productRepository, ResourceServiceInterface $categoryGetIdService, ResourceServiceInterface $measureGetIdService)
+
+    public function __construct(ProductRepositoryInterface $productRepository,
+                                ResourceServiceInterface $categoryGetIdService,
+                                ResourceServiceInterface $measureGetIdService,
+                                CategoryServiceInterface $categoryService,
+                                MeasureServiceInterface $measureService
+    )
     {
         $this->productRepository = $productRepository;
         $this->categoryGetIdService = $categoryGetIdService;
         $this->measureGetIdService = $measureGetIdService;
+        $this->categoryService = $categoryService;
+        $this->measureService = $measureService;
         $this->product = new Product();
     }
 
 
     public function addProduct(ProductRequest $productRequest): bool
     {
+
         $categoryId = $this->categoryGetIdService->getIdByUuid($productRequest->getCategoryId());
         $measureId = $this->measureGetIdService->getIdByUuid($productRequest->getMeasureId());
 
@@ -58,6 +75,7 @@ class ProductService implements ProductServiceInterface
 
     public function findProductByUuid(string $uuid): ProductDto
     {
+
         $product = $this->productRepository->findProductByUuid($uuid);
 
         $this->product = $product;
@@ -69,20 +87,17 @@ class ProductService implements ProductServiceInterface
         $productDto->setPrice($this->product->getPrice());
         $productDto->setPromotionPrice($this->product->getPromotionPrice());
 
-        $measure = new MeasureDto();
-        $measure->setId('24357ac9-729b-4d78-9638-7e1f653cdf57');
-        $measure->setName('UNIDAD');
 
+        $measure = $this->measureService->findMeasureById($this->product->getMeasureId());
         $productDto->setMeasure($measure);
+
         $productDto->setDescription($this->product->getDescription());
         $productDto->setSkuCode($this->product->getSkuCode());
         $productDto->setCost($this->product->getCost());
         $productDto->setFeatured($this->product->getFeatured());
         $productDto->setStock($this->product->getStock());
 
-        $category = new CategoryDto();
-        $category->setId('012b637a-702a-4643-92f1-23fc8bb11a95');
-        $category->setName('CATEGORIA A');
+        $category = $this->categoryService->findCategoryById($this->product->getCategoryId());
         $productDto->setCategory($category);
 
         return $productDto;
@@ -94,9 +109,15 @@ class ProductService implements ProductServiceInterface
         return $this->productRepository->deleteProductById($this->product->getId());
     }
 
-    public function findProducts(array $queries): array
+    public function findProducts(ProductPaginateParams $queries): ProductPaginateResponse
     {
-        return $this->productRepository->findProducts($queries);
+        $lstProducts = [];
+        $lst = $this->productRepository->findProducts($queries);
+        foreach ($lst->getRows() as $item) {
+            $lstProducts[] = $this->product->transformEntityToDtoPaginate($item);
+        }
+        $lst->setRows(array_values($lstProducts));
+        return $lst;
     }
 
 }

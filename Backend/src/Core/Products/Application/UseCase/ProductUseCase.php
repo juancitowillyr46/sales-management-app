@@ -6,8 +6,10 @@ namespace App\Core\Products\Application\UseCase;
 
 use App\Core\Products\Application\Dto\ProductDto;
 use App\Core\Products\Application\Request\ProductRequest;
+use App\Core\Products\Domain\Entity\ProductPaginateParams;
+use App\Core\Products\Domain\Entity\ProductPaginateResponse;
 use App\Core\Products\Domain\Service\ProductServiceInterface;
-use App\Core\Products\Domain\Service\ResourceServiceInterface;
+
 
 class ProductUseCase implements ProductUseCaseInterface
 {
@@ -39,7 +41,7 @@ class ProductUseCase implements ProductUseCaseInterface
         return $this->productService->deleteProductByUuid($uuid);
     }
 
-    public function findProducts(array $queries): array
+    public function findProducts(ProductPaginateParams $queries): ProductPaginateResponse
     {
         return $this->productService->findProducts($queries);
     }

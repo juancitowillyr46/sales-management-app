@@ -27,4 +27,13 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
         return $this->categoryEntity->transformModelToEntity((object)$categoryModel);
     }
+
+    public function findCategoryById(int $id): CategoryEntity
+    {
+        $categoryModel = $this->categoryModel::find($id)->first();
+        if(is_null($categoryModel)) {
+            throw new CategoryNotFoundException();
+        }
+        return $this->categoryEntity->transformModelToEntity((object)$categoryModel);
+    }
 }

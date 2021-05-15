@@ -3,6 +3,9 @@
 namespace App\Core\Products\Application\Dto;
 
 
+use App\Core\Categories\Application\CategoryDto;
+use App\Core\Measures\Application\MeasureDto;
+
 class ProductDto
 {
     public string $id;
