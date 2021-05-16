@@ -27,4 +27,12 @@ return function (App $app) {
         $group->put('/{id}', UpdateProductAction::class);
         $group->delete('/{id}', DeleteProductAction::class);
     });
+
+    $app->group('/movements', function (Group $group) {
+        //$group->get('', FindProductsAction::class);
+        $group->post('', AddProductAction::class);
+//        $group->get('/{id}', FindProductByUuidAction::class);
+//        $group->put('/{id}', UpdateProductAction::class);
+//        $group->delete('/{id}', DeleteProductAction::class);
+    });
 };

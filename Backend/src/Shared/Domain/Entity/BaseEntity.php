@@ -16,13 +16,14 @@ class BaseEntity implements IBaseEntity
     public string $updatedBy;
     public string $deletedAt;
     public string $deletedBy;
-
+    public int $stateId;
 
     public function __construct()
     {
         $this->createdAt = date('Y-m-d H:i:s');
         $this->updatedAt = date('Y-m-d H:i:s');
         $this->deletedAt = date('Y-m-d H:i:s');
+        $this->stateId = 1;
     }
 
     /**
@@ -153,8 +154,26 @@ class BaseEntity implements IBaseEntity
         $this->deletedBy = $deletedBy;
     }
 
+    /**
+     * @return int
+     */
+    public function getStateId(): int
+    {
+        return $this->stateId;
+    }
+
+    /**
+     * @param int $stateId
+     */
+    public function setStateId(int $stateId): void
+    {
+        $this->stateId = $stateId;
+    }
+
     public function generateUuid(): string {
         $buildCodeUnique = new BuildingCodeUnique();
         return $buildCodeUnique->generateCodeUnique();
     }
+
+
 }
