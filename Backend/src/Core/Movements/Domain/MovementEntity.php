@@ -13,7 +13,7 @@ class MovementEntity extends BaseEntity
 {
     public string $documentTypeId;
     public string $documentNum;
-    public date $dateIssue;
+    public string $dateIssue;
     public string $movementType;
     public string $concept;
     public int $quantity;

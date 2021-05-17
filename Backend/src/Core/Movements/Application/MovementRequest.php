@@ -256,6 +256,10 @@ class MovementRequest
                 ],
                 'reference' => [
                     new Assert\Required(),
+                ],
+                'products' => [
+                    new Assert\Required(),
+                    new Assert\Type('array')
                 ]
             ]
         );
