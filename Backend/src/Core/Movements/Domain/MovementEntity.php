@@ -16,23 +16,21 @@ class MovementEntity extends BaseEntity
     public string $dateIssue;
     public string $movementType;
     public string $concept;
-    public int $quantity;
     public float $totalPrice;
-    public string $reference;
     public array $products;
 
     public function __construct()
     {
         parent::__construct();
+        $this->uuid = $this->generateUuid();
         $this->documentTypeId = 'INVOICE';
         $this->documentNum = '';
         $this->dateIssue = date('Y-m-d H:i:s');
         $this->movementType = 'OUTPUT';
         $this->concept = 'SALE';
-        $this->quantity = 0;
         $this->totalPrice = 0.0;
-        $this->reference = '-';
         $this->products = [];
+        $this->createdBy = 'JUAN';
     }
 
     /**
@@ -116,22 +114,6 @@ class MovementEntity extends BaseEntity
     }
 
     /**
-     * @return int
-     */
-    public function getQuantity(): int
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * @param int $quantity
-     */
-    public function setQuantity(int $quantity): void
-    {
-        $this->quantity = $quantity;
-    }
-
-    /**
      * @return float
      */
     public function getTotalPrice(): float
@@ -145,22 +127,6 @@ class MovementEntity extends BaseEntity
     public function setTotalPrice(float $totalPrice): void
     {
         $this->totalPrice = $totalPrice;
-    }
-
-    /**
-     * @return float|string
-     */
-    public function getReference()
-    {
-        return $this->reference;
-    }
-
-    /**
-     * @param float|string $reference
-     */
-    public function setReference($reference): void
-    {
-        $this->reference = $reference;
     }
 
     /**
@@ -185,10 +151,23 @@ class MovementEntity extends BaseEntity
         $this->setDateIssue($productRequest->getDateIssue());
         $this->setMovementType($productRequest->getMovementType());
         $this->setConcept($productRequest->getConcept());
-        $this->setQuantity($productRequest->getQuantity());
         $this->setTotalPrice($productRequest->getTotalPrice());
-        $this->setReference($productRequest->getReference());
         $this->setProducts($productRequest->getProducts());
         return $this;
+    }
+
+    public function transformEntityToModel(MovementEntity $movement): array {
+        $fields = [
+            'uuid' => $movement->getUuid(),
+            'document_type_id' => $movement->getDocumentTypeId(),
+            'document_num' => $movement->getDocumentNum(),
+            'date_issue' => $movement->getDateIssue(),
+            'movement_type' => $movement->getMovementType(),
+            'concept' => $movement->getConcept(),
+            'total_price' => $movement->getTotalPrice(),
+            'state_id' => $movement->getStateId(),
+            'created_by' => $movement->getCreatedBy()
+        ];
+        return $fields;
     }
 }

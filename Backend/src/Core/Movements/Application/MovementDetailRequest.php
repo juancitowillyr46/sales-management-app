@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Validation;
  *     schema="MovementDetail",
  *     title="MovementDetail",
  *     description="Request MovementDetail",
- *     required={"productMovementId", "productId", "quantity", "unitPrice", "totalPrice"}
+ *     required={"productId", "quantity", "unitPrice", "totalPrice"}
  * )
  */
 class MovementDetailRequest
@@ -30,12 +30,12 @@ class MovementDetailRequest
     public int $quantity;
 
     /**
-     * @OA\Property(type="number", example="15.00")
+     * @OA\Property(type="number", example="99.9")
      */
     public float $unitPrice;
 
     /**
-     * @OA\Property(type="number", example="35.00")
+     * @OA\Property(type="number", example="99.9")
      */
     public float $totalPrice;
 
@@ -128,9 +128,11 @@ class MovementDetailRequest
                 ],
                 'unitPrice' => [
                     new Assert\Optional(),
+                    new Assert\Type('float')
                 ],
                 'totalPrice' => [
                     new Assert\Required(),
+                    new Assert\Type('float')
                 ]
             ]
         );

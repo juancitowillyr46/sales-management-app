@@ -25,9 +25,7 @@ class MovementModel extends Model
         'date_issue',
         'movement_type',
         'concept',
-        'quantity',
         'total_price',
-        'reference',
         'state_id',
         'created_by'
     ];

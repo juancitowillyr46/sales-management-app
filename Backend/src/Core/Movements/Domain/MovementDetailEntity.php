@@ -3,6 +3,8 @@
 
 namespace App\Core\Movements\Domain;
 
+use App\Core\Movements\Application\MovementDetailRequest;
+use App\Core\Movements\Application\MovementRequest;
 use App\Shared\Domain\Entity\BaseEntity;
 
 class MovementDetailEntity extends BaseEntity
@@ -104,6 +106,26 @@ class MovementDetailEntity extends BaseEntity
         $this->totalPrice = $totalPrice;
     }
 
+    public function transformRequestToEntity(MovementDetailRequest $movementRequest, int $movementId): MovementDetailEntity {
+        $this->setProductMovementId($movementId);
+        $this->setQuantity($movementRequest->getQuantity());
+        $this->setUnitPrice($movementRequest->getUnitPrice());
+        $this->setTotalPrice($movementRequest->getTotalPrice());
+        return $this;
+    }
 
+    public function transformEntityToModel(MovementDetailEntity $movementDetail): array {
+        $fields = [
+            'uuid' => $movementDetail->getUuid(),
+            'product_movement_Id' => $movementDetail->getProductMovementId(),
+            'product_id' => $movementDetail->getProductId(),
+            'quantity' => $movementDetail->getQuantity(),
+            'unit_price' => $movementDetail->getUnitPrice(),
+            'total_price' => $movementDetail->getTotalPrice(),
+            'state_id' => $movementDetail->getStateId(),
+            'created_by' => $movementDetail->getCreatedBy()
+        ];
+        return $fields;
+    }
 
 }

@@ -46,19 +46,9 @@ class MovementRequest
     public string $concept;
 
     /**
-     * @OA\Property(type="number", example="1")
-     */
-    public int $quantity;
-
-    /**
-     * @OA\Property(type="number", example="20.00")
+     * @OA\Property(type="number", example="99.9")
      */
     public float $totalPrice;
-
-    /**
-     * @OA\Property(type="string", example="-")
-     */
-    public string $reference;
 
     /**
      * @OA\Property(property="products", type="array", @OA\Items(ref="#/components/schemas/MovementDetail"))
@@ -74,10 +64,8 @@ class MovementRequest
         $this->dateIssue = $requestBody->dateIssue;
         $this->movementType = $requestBody->movementType;
         $this->concept = $requestBody->concept;
-        $this->quantity = $requestBody->quantity;
         $this->totalPrice = $requestBody->totalPrice;
-        $this->reference = $requestBody->reference;
-        $this->products = $requestBody->products;
+        $this->products = $this->collectionMovementDetail((object) $requestBody->products);
     }
 
 
@@ -162,22 +150,6 @@ class MovementRequest
     }
 
     /**
-     * @return int
-     */
-    public function getQuantity(): int
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * @param int $quantity
-     */
-    public function setQuantity(int $quantity): void
-    {
-        $this->quantity = $quantity;
-    }
-
-    /**
      * @return float
      */
     public function getTotalPrice(): float
@@ -191,22 +163,6 @@ class MovementRequest
     public function setTotalPrice(float $totalPrice): void
     {
         $this->totalPrice = $totalPrice;
-    }
-
-    /**
-     * @return string
-     */
-    public function getReference(): string
-    {
-        return $this->reference;
-    }
-
-    /**
-     * @param string $reference
-     */
-    public function setReference(string $reference): void
-    {
-        $this->reference = $reference;
     }
 
     /**
@@ -247,15 +203,10 @@ class MovementRequest
                 ],
                 'concept' => [
                     new Assert\Required(),
-                ] ,
-                'quantity' => [
-                    new Assert\Required(),
                 ],
                 'totalPrice' => [
                     new Assert\Required(),
-                ],
-                'reference' => [
-                    new Assert\Required(),
+                    new Assert\Type('float')
                 ],
                 'products' => [
                     new Assert\Required(),
@@ -285,4 +236,11 @@ class MovementRequest
 
     }
 
+    public function collectionMovementDetail(object $movementDetail): array {
+        $lst = [];
+        foreach ($movementDetail as $item) {
+            $lst[] = new MovementDetailRequest((object) $item);
+        }
+        return $lst;
+    }
 }

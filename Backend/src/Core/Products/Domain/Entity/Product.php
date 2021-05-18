@@ -37,6 +37,7 @@ class Product extends BaseEntity
         $this->presentation = "";
         $this->stateId = 0;
         $this->price = 0.0;
+        $this->createdBy = 'JUAN';
     }
 
     /**
