@@ -22,7 +22,6 @@ class MovementEntity extends BaseEntity
     public function __construct()
     {
         parent::__construct();
-        $this->uuid = $this->generateUuid();
         $this->documentTypeId = 'INVOICE';
         $this->documentNum = '';
         $this->dateIssue = date('Y-m-d H:i:s');
@@ -30,7 +29,6 @@ class MovementEntity extends BaseEntity
         $this->concept = 'SALE';
         $this->totalPrice = 0.0;
         $this->products = [];
-        $this->createdBy = 'JUAN';
     }
 
     /**

@@ -20,10 +20,13 @@ class BaseEntity implements IBaseEntity
 
     public function __construct()
     {
+        $this->id = 0;
+        $this->uuid = $this->generateUuid();
         $this->createdAt = date('Y-m-d H:i:s');
         $this->updatedAt = date('Y-m-d H:i:s');
         $this->deletedAt = date('Y-m-d H:i:s');
         $this->stateId = 1;
+        $this->createdBy = 'JUAN';
     }
 
     /**

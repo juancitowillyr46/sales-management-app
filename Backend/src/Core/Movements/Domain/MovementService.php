@@ -6,17 +6,20 @@ namespace App\Core\Movements\Domain;
 
 use App\Core\Movements\Application\MovementRequest;
 use App\Core\Movements\Domain\Exception\DocNumDuplicateException;
+use App\Core\Products\Domain\Repository\ProductRepositoryInterface;
 
 class MovementService implements MovementServiceInterface
 {
     protected MovementRepositoryInterface $movementRepository;
     protected MovementEntity $movementEntity;
     protected MovementDetailEntity $movementDetailEntity;
+    protected ProductRepositoryInterface $productRepository;
 
 
-    public function __construct(MovementRepositoryInterface $movementRepository)
+    public function __construct(MovementRepositoryInterface $movementRepository, ProductRepositoryInterface $productRepository)
     {
         $this->movementRepository = $movementRepository;
+        $this->productRepository = $productRepository;
         $this->movementEntity = new MovementEntity();
         $this->movementDetailEntity = new MovementDetailEntity();
 
@@ -39,7 +42,10 @@ class MovementService implements MovementServiceInterface
     public function addMovementDetail(array $movementDetailRequest, int $movementId): bool
     {
         foreach ($movementDetailRequest as $detail) {
-            $this->movementDetailEntity->setProductId(1);
+
+            $product = $this->productRepository->findProductSelectIdByUid($detail->productId);
+            $this->movementDetailEntity->setProductId($product->getId());
+
             $toEntity = $this->movementDetailEntity->transformRequestToEntity($detail, $movementId);
             $success = $this->movementRepository->addMovementDetail($toEntity);
         }

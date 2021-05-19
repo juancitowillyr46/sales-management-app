@@ -9,7 +9,7 @@ use App\Shared\Domain\Entity\BaseEntity;
 
 class MovementDetailEntity extends BaseEntity
 {
-    public int $productMovementId;
+    public int $movementId;
     public int $productId;
     public int $quantity;
     public float $unitPrice;
@@ -18,28 +18,27 @@ class MovementDetailEntity extends BaseEntity
     public function __construct()
     {
         parent::__construct();
-        $this->productMovementId = 0;
+        $this->movementId = 0;
         $this->productId = 0;
         $this->quantity = 0;
         $this->unitPrice = 0;
         $this->totalPrice = 0;
     }
 
-
     /**
      * @return int
      */
-    public function getProductMovementId(): int
+    public function getMovementId(): int
     {
-        return $this->productMovementId;
+        return $this->movementId;
     }
 
     /**
-     * @param int $productMovementId
+     * @param int $movementId
      */
-    public function setProductMovementId(int $productMovementId): void
+    public function setMovementId(int $movementId): void
     {
-        $this->productMovementId = $productMovementId;
+        $this->movementId = $movementId;
     }
 
     /**
@@ -107,7 +106,8 @@ class MovementDetailEntity extends BaseEntity
     }
 
     public function transformRequestToEntity(MovementDetailRequest $movementRequest, int $movementId): MovementDetailEntity {
-        $this->setProductMovementId($movementId);
+        $this->setUuid($this->generateUuid());
+        $this->setMovementId($movementId);
         $this->setQuantity($movementRequest->getQuantity());
         $this->setUnitPrice($movementRequest->getUnitPrice());
         $this->setTotalPrice($movementRequest->getTotalPrice());
@@ -117,7 +117,7 @@ class MovementDetailEntity extends BaseEntity
     public function transformEntityToModel(MovementDetailEntity $movementDetail): array {
         $fields = [
             'uuid' => $movementDetail->getUuid(),
-            'product_movement_Id' => $movementDetail->getProductMovementId(),
+            'movement_id' => $movementDetail->getMovementId(),
             'product_id' => $movementDetail->getProductId(),
             'quantity' => $movementDetail->getQuantity(),
             'unit_price' => $movementDetail->getUnitPrice(),

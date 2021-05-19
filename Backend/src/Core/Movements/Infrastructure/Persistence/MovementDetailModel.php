@@ -7,7 +7,7 @@ namespace App\Core\Movements\Infrastructure\Persistence;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MovementModel extends Model
+class MovementDetailModel extends Model
 {
     use SoftDeletes;
 
@@ -15,16 +15,15 @@ class MovementModel extends Model
 
     public $timestamps = ["created_at", "updated_at", "deleted_at"];
 
-    protected $table = "movement";
+    protected $table = "movement_detail";
 
     protected $fillable = [
         'id',
         'uuid',
-        'document_type_id',
-        'document_num',
-        'date_issue',
-        'movement_type',
-        'concept',
+        'movement_id',
+        'product_id',
+        'quantity',
+        'unit_price',
         'total_price',
         'state_id',
         'created_by'

@@ -24,6 +24,7 @@ class Product extends BaseEntity
     public function __construct()
     {
         parent::__construct();
+
         $this->uuid = $this->generateUuid();
         $this->image = "";
         $this->name = "";
@@ -301,6 +302,11 @@ class Product extends BaseEntity
         $product->setStock($productModel->stock);
         $product->setFeatured($productModel->featured);
         $product->setStateId($productModel->state_id);
+        return $product;
+    }
+    public function transformSelectId(int $id): Product {
+        $product = $this;
+        $product->setId($id);
         return $product;
     }
 

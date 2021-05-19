@@ -12,11 +12,14 @@ use App\Product;
 class MovementRepository implements MovementRepositoryInterface
 {
     protected MovementModel $movementModel;
+    protected MovementDetailModel $movementDetailModel;
     protected MovementEntity $movementEntity;
+    protected MovementDetailEntity $movementDetailEntity;
 
     public function __construct()
     {
         $this->movementModel = new MovementModel();
+        $this->movementDetailModel = new MovementDetailModel();
         $this->movementEntity = new MovementEntity();
     }
 
@@ -26,14 +29,15 @@ class MovementRepository implements MovementRepositoryInterface
         return $movementObject->id;
     }
 
+    public function addMovementDetail(MovementDetailEntity $movementDetail): int
+    {
+        $movementObject = $this->movementDetailModel::create($movementDetail->transformEntityToModel($movementDetail));
+        return $movementObject->id;
+    }
+
     public function validateDocumentNum(string $documentNum): bool {
         $count = $this->movementModel::where("document_num", "=", $documentNum)->first();
         return !is_null($count);
-    }
-
-    public function addMovementDetail(MovementDetailEntity $movementDetail): bool
-    {
-        return true;
     }
 
 }
