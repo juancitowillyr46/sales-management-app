@@ -7,6 +7,7 @@ namespace App\Core\Movements\Domain;
 use App\Core\Movements\Application\MovementRequest;
 use App\Core\Movements\Domain\Exception\DocNumDuplicateException;
 use App\Core\Products\Domain\Repository\ProductRepositoryInterface;
+use App\Core\Products\Domain\Service\ProductStockServiceInterface;
 
 class MovementService implements MovementServiceInterface
 {
@@ -14,15 +15,19 @@ class MovementService implements MovementServiceInterface
     protected MovementEntity $movementEntity;
     protected MovementDetailEntity $movementDetailEntity;
     protected ProductRepositoryInterface $productRepository;
+    protected ProductStockServiceInterface $productStockService;
 
-
-    public function __construct(MovementRepositoryInterface $movementRepository, ProductRepositoryInterface $productRepository)
+    public function __construct(
+        MovementRepositoryInterface $movementRepository,
+        ProductRepositoryInterface $productRepository,
+        ProductStockServiceInterface $productStockService
+    )
     {
         $this->movementRepository = $movementRepository;
         $this->productRepository = $productRepository;
         $this->movementEntity = new MovementEntity();
         $this->movementDetailEntity = new MovementDetailEntity();
-
+        $this->productStockService = $productStockService;
     }
 
     public function addMovement(MovementRequest $movementRequest): bool
@@ -33,25 +38,38 @@ class MovementService implements MovementServiceInterface
 
         $movementId = $this->movementRepository->addMovement($toEntity);
 
-        $this->addMovementDetail($movementRequest->getProducts(), $movementId);
+        $this->addMovementDetail($movementRequest, $movementId);
 
         return true;
 
     }
 
-    public function addMovementDetail(array $movementDetailRequest, int $movementId): bool
+    public function addMovementDetail(MovementRequest $movementRequest, int $movementId): bool //array $movementDetailRequest
     {
-        foreach ($movementDetailRequest as $detail) {
+        foreach ($movementRequest->getProducts() as $detail) {
 
-            $product = $this->productRepository->findProductSelectIdByUid($detail->productId);
-            $this->movementDetailEntity->setProductId($product->getId());
+            $objProduct = $this->productRepository->findProductSelectIdByUid($detail->productId);
 
-            $toEntity = $this->movementDetailEntity->transformRequestToEntity($detail, $movementId);
+            $toEntity = $this->movementDetailEntity->transformRequestToEntity($detail, $movementId, $objProduct);
+
             $success = $this->movementRepository->addMovementDetail($toEntity);
+
+            if($success) {
+
+                if($movementRequest->getConcept() == "SALE") {
+                    $objProduct = $this->movementEntity->diminishStock($objProduct, $this->movementDetailEntity->getQuantity());
+                } else if($this->movementEntity->getConcept() == "PURCHASE") {
+                    $objProduct = $this->movementEntity->incrementStock($objProduct, $this->movementDetailEntity->getQuantity());
+                } else if($$this->movementEntity->getConcept() == "INITIAL_STOCK") {
+                    $objProduct->setStock($this->movementDetailEntity->getQuantity());
+                }
+
+                $this->productStockService->updateStock($detail->productId, $objProduct->getStock());
+            }
         }
+
         return true;
     }
-
 
     public function validateDocumentNum(MovementRequest $productRequest): bool
     {

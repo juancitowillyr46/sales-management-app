@@ -3,7 +3,9 @@ namespace App\Core\Products\Domain\Entity;
 
 use App\Core\Products\Application\Dto\ProductDto;
 use App\Core\Products\Application\Request\ProductRequest;
+use App\Core\Products\Infrastructure\Persistence\Repository\Eloquent\ProductModel;
 use App\Shared\Domain\Entity\BaseEntity;
+use Illuminate\Database\Eloquent\Model;
 
 class Product extends BaseEntity
 {
@@ -304,9 +306,10 @@ class Product extends BaseEntity
         $product->setStateId($productModel->state_id);
         return $product;
     }
-    public function transformSelectId(int $id): Product {
+    public function transformSelectId(ProductModel $productModel): Product {
         $product = $this;
-        $product->setId($id);
+        $product->setId($productModel->getAttribute('id'));
+        $product->setStock($productModel->getAttribute('stock'));
         return $product;
     }
 
@@ -320,5 +323,7 @@ class Product extends BaseEntity
         $productDto->setPromotionPrice($product->getPromotionPrice());
         return $productDto;
     }
+
+    //public function incre
 }
 

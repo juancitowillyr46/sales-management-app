@@ -79,10 +79,10 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     public function findProductSelectIdByUid(string $uuid): Product {
-        $productModelIdValue = $this->productModel::where("uuid", "=", $uuid)->value('id');
-        if(is_null($productModelIdValue)) {
+        $objProductModel = $this->productModel::where("uuid", "=", $uuid)->first(['id','stock']);
+        if(is_null($objProductModel)) {
             throw new ProductNotFoundException();
         }
-        return $this->product->transformSelectId($productModelIdValue);
+        return $this->product->transformSelectId($objProductModel);
     }
 }

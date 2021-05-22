@@ -8,6 +8,8 @@ use App\Core\Movements\Domain\MovementService;
 use App\Core\Movements\Domain\MovementServiceInterface;
 use App\Core\Products\Domain\Service\ProductService;
 use App\Core\Products\Domain\Service\ProductServiceInterface;
+use App\Core\Products\Domain\Service\ProductStockService;
+use App\Core\Products\Domain\Service\ProductStockServiceInterface;
 use App\Core\Products\Domain\Service\ResourceGetIdService;
 use App\Core\Products\Domain\Service\ResourceServiceInterface;
 use DI\ContainerBuilder;
@@ -18,6 +20,7 @@ return function (ContainerBuilder $containerBuilder) {
         ProductServiceInterface::class => \DI\autowire(ProductService::class),
         CategoryServiceInterface::class=> \DI\autowire(CategoryService::class),
         MeasureServiceInterface::class => \DI\autowire(MeasureService::class),
-        MovementServiceInterface::class => \DI\autowire(MovementService::class)
+        MovementServiceInterface::class => \DI\autowire(MovementService::class),
+        ProductStockServiceInterface::class => \DI\autowire(ProductStockService::class),
     ]);
 };

@@ -5,6 +5,7 @@ namespace App\Core\Movements\Domain;
 
 
 use App\Core\Movements\Application\MovementRequest;
+use App\Core\Products\Domain\Entity\Product;
 use App\Shared\Domain\Entity\BaseEntity;
 use Cake\Chronos\Date;
 
@@ -167,5 +168,15 @@ class MovementEntity extends BaseEntity
             'created_by' => $movement->getCreatedBy()
         ];
         return $fields;
+    }
+
+    public function incrementStock(Product $product, int $requestQuantityStock): Product {
+        $product->setStock($product->getStock() + $requestQuantityStock);
+        return $product;
+    }
+
+    public function diminishStock(Product $product, int $requestQuantityStock): Product {
+        $product->setStock($product->getStock() - $requestQuantityStock);
+        return $product;
     }
 }

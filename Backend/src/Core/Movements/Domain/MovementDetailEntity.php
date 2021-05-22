@@ -5,6 +5,7 @@ namespace App\Core\Movements\Domain;
 
 use App\Core\Movements\Application\MovementDetailRequest;
 use App\Core\Movements\Application\MovementRequest;
+use App\Core\Products\Domain\Entity\Product;
 use App\Shared\Domain\Entity\BaseEntity;
 
 class MovementDetailEntity extends BaseEntity
@@ -105,12 +106,13 @@ class MovementDetailEntity extends BaseEntity
         $this->totalPrice = $totalPrice;
     }
 
-    public function transformRequestToEntity(MovementDetailRequest $movementRequest, int $movementId): MovementDetailEntity {
+    public function transformRequestToEntity(MovementDetailRequest $detail, int $movementId, Product $product): MovementDetailEntity {
         $this->setUuid($this->generateUuid());
+        $this->setQuantity($detail->getQuantity());
+        $this->setUnitPrice($detail->getUnitPrice());
+        $this->setTotalPrice($detail->getTotalPrice());
+        $this->setProductId($product->getId());
         $this->setMovementId($movementId);
-        $this->setQuantity($movementRequest->getQuantity());
-        $this->setUnitPrice($movementRequest->getUnitPrice());
-        $this->setTotalPrice($movementRequest->getTotalPrice());
         return $this;
     }
 
