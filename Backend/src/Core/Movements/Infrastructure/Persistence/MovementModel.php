@@ -23,9 +23,7 @@ class MovementModel extends Model
         'document_type_id',
         'document_num',
         'date_issue',
-        'movement_type',
         'concept',
-        'total_price',
         'state_id',
         'created_by'
     ];

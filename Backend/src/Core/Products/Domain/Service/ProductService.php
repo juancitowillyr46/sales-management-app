@@ -120,4 +120,8 @@ class ProductService implements ProductServiceInterface
         return $lst;
     }
 
+    public function findProductSelectIdByUid(string $uuid): Product
+    {
+        return $this->productRepository->findProductSelectIdByUid($uuid);
+    }
 }

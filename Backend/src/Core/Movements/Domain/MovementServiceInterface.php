@@ -12,6 +12,7 @@ interface MovementServiceInterface
     public function addMovement(MovementRequest $productRequest): bool;
     public function addMovementDetail(MovementRequest $movementEntity, int $movementId): bool;
 
+    public function validateProductStock(MovementRequest $movementEntity): void;
     public function validateDocumentNum(MovementRequest $productRequest): bool;
 
 }

@@ -18,6 +18,8 @@ class MovementUseCase implements MovementUseCaseInterface
 
     public function addMovement(MovementRequest $movementRequest): void
     {
+        $this->movementService->validateProductStock($movementRequest);
+
         $this->movementService->addMovement($movementRequest);
     }
 }

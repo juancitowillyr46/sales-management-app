@@ -7,6 +7,7 @@ namespace App\Core\Movements\Domain;
 use App\Core\Movements\Application\MovementRequest;
 use App\Core\Movements\Domain\Exception\DocNumDuplicateException;
 use App\Core\Products\Domain\Repository\ProductRepositoryInterface;
+use App\Core\Products\Domain\Service\ProductServiceInterface;
 use App\Core\Products\Domain\Service\ProductStockServiceInterface;
 
 class MovementService implements MovementServiceInterface
@@ -14,19 +15,20 @@ class MovementService implements MovementServiceInterface
     protected MovementRepositoryInterface $movementRepository;
     protected MovementEntity $movementEntity;
     protected MovementDetailEntity $movementDetailEntity;
-    protected ProductRepositoryInterface $productRepository;
+    protected ProductServiceInterface $productService;
     protected ProductStockServiceInterface $productStockService;
 
     public function __construct(
         MovementRepositoryInterface $movementRepository,
-        ProductRepositoryInterface $productRepository,
+        ProductServiceInterface $productService,
         ProductStockServiceInterface $productStockService
     )
     {
         $this->movementRepository = $movementRepository;
-        $this->productRepository = $productRepository;
         $this->movementEntity = new MovementEntity();
         $this->movementDetailEntity = new MovementDetailEntity();
+
+        $this->productService = $productService;
         $this->productStockService = $productStockService;
     }
 
@@ -48,7 +50,7 @@ class MovementService implements MovementServiceInterface
     {
         foreach ($movementRequest->getProducts() as $detail) {
 
-            $objProduct = $this->productRepository->findProductSelectIdByUid($detail->productId);
+            $objProduct = $this->productService->findProductSelectIdByUid($detail->productId);
 
             $toEntity = $this->movementDetailEntity->transformRequestToEntity($detail, $movementId, $objProduct);
 
@@ -77,5 +79,12 @@ class MovementService implements MovementServiceInterface
             throw new DocNumDuplicateException();
         }
         return false;
+    }
+
+    public function validateProductStock(MovementRequest $movementEntity): void
+    {
+        foreach ($movementEntity->getProducts() as $product) {
+            $this->productStockService->currentStock($product->productId);
+        }
     }
 }

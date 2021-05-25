@@ -22,4 +22,10 @@ class ProductStockRepository implements ProductStockRepositoryInterface
         $productModel->stock = $stock;
         return $productModel->save();
     }
+
+    public function currentStock(string $uuid): int
+    {
+        $stockProduct = $this->productModel::where("uuid", "=", $uuid)->value('stock');
+        return $stockProduct;
+    }
 }

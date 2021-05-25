@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Validation;
  *     schema="Movement",
  *     title="Movement",
  *     description="Request Movement",
- *     required={"documentTypeId", "documentNum", "dateIssue", "movementType", "concept", "quantity", "totalPrice", "totalPrice"}
+ *     required={"documentTypeId", "documentNum", "dateIssue", "concept"}
  * )
  */
 class MovementRequest
@@ -36,19 +36,9 @@ class MovementRequest
     public string $dateIssue;
 
     /**
-     * @OA\Property(type="string", example="INPUT")
-     */
-    public string $movementType;
-
-    /**
      * @OA\Property(type="string", example="SALE")
      */
     public string $concept;
-
-    /**
-     * @OA\Property(type="number", example="99.9")
-     */
-    public float $totalPrice;
 
     /**
      * @OA\Property(property="products", type="array", @OA\Items(ref="#/components/schemas/MovementDetail"))
@@ -62,9 +52,7 @@ class MovementRequest
         $this->documentTypeId = $requestBody->documentTypeId;
         $this->documentNum = $requestBody->documentNum;
         $this->dateIssue = $requestBody->dateIssue;
-        $this->movementType = $requestBody->movementType;
         $this->concept = $requestBody->concept;
-        $this->totalPrice = $requestBody->totalPrice;
         $this->products = $this->collectionMovementDetail((object) $requestBody->products);
     }
 
@@ -120,22 +108,6 @@ class MovementRequest
     /**
      * @return string
      */
-    public function getMovementType(): string
-    {
-        return $this->movementType;
-    }
-
-    /**
-     * @param string $movementType
-     */
-    public function setMovementType(string $movementType): void
-    {
-        $this->movementType = $movementType;
-    }
-
-    /**
-     * @return string
-     */
     public function getConcept(): string
     {
         return $this->concept;
@@ -147,22 +119,6 @@ class MovementRequest
     public function setConcept(string $concept): void
     {
         $this->concept = $concept;
-    }
-
-    /**
-     * @return float
-     */
-    public function getTotalPrice(): float
-    {
-        return $this->totalPrice;
-    }
-
-    /**
-     * @param float $totalPrice
-     */
-    public function setTotalPrice(float $totalPrice): void
-    {
-        $this->totalPrice = $totalPrice;
     }
 
     /**
@@ -198,15 +154,8 @@ class MovementRequest
                 'dateIssue' => [
                     new Assert\Optional(),
                 ],
-                'movementType' => [
-                    new Assert\Required(),
-                ],
                 'concept' => [
                     new Assert\Required(),
-                ],
-                'totalPrice' => [
-                    new Assert\Required(),
-                    new Assert\Type('float')
                 ],
                 'products' => [
                     new Assert\Required(),

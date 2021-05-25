@@ -15,9 +15,7 @@ class MovementEntity extends BaseEntity
     public string $documentTypeId;
     public string $documentNum;
     public string $dateIssue;
-    public string $movementType;
     public string $concept;
-    public float $totalPrice;
     public array $products;
 
     public function __construct()
@@ -26,9 +24,7 @@ class MovementEntity extends BaseEntity
         $this->documentTypeId = 'INVOICE';
         $this->documentNum = '';
         $this->dateIssue = date('Y-m-d H:i:s');
-        $this->movementType = 'OUTPUT';
         $this->concept = 'SALE';
-        $this->totalPrice = 0.0;
         $this->products = [];
     }
 
@@ -83,22 +79,6 @@ class MovementEntity extends BaseEntity
     /**
      * @return string
      */
-    public function getMovementType(): string
-    {
-        return $this->movementType;
-    }
-
-    /**
-     * @param string $movementType
-     */
-    public function setMovementType(string $movementType): void
-    {
-        $this->movementType = $movementType;
-    }
-
-    /**
-     * @return string
-     */
     public function getConcept(): string
     {
         return $this->concept;
@@ -110,22 +90,6 @@ class MovementEntity extends BaseEntity
     public function setConcept(string $concept): void
     {
         $this->concept = $concept;
-    }
-
-    /**
-     * @return float
-     */
-    public function getTotalPrice(): float
-    {
-        return $this->totalPrice;
-    }
-
-    /**
-     * @param float $totalPrice
-     */
-    public function setTotalPrice(float $totalPrice): void
-    {
-        $this->totalPrice = $totalPrice;
     }
 
     /**
@@ -148,9 +112,7 @@ class MovementEntity extends BaseEntity
         $this->setDocumentTypeId($productRequest->getDocumentTypeId());
         $this->setDocumentNum($productRequest->getDocumentNum());
         $this->setDateIssue($productRequest->getDateIssue());
-        $this->setMovementType($productRequest->getMovementType());
         $this->setConcept($productRequest->getConcept());
-        $this->setTotalPrice($productRequest->getTotalPrice());
         $this->setProducts($productRequest->getProducts());
         return $this;
     }
@@ -161,9 +123,7 @@ class MovementEntity extends BaseEntity
             'document_type_id' => $movement->getDocumentTypeId(),
             'document_num' => $movement->getDocumentNum(),
             'date_issue' => $movement->getDateIssue(),
-            'movement_type' => $movement->getMovementType(),
             'concept' => $movement->getConcept(),
-            'total_price' => $movement->getTotalPrice(),
             'state_id' => $movement->getStateId(),
             'created_by' => $movement->getCreatedBy()
         ];
