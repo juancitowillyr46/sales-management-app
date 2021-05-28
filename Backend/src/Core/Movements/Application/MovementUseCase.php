@@ -8,7 +8,6 @@ use App\Core\Movements\Domain\MovementServiceInterface;
 
 class MovementUseCase implements MovementUseCaseInterface
 {
-
     protected MovementServiceInterface $movementService;
 
     public function __construct(MovementServiceInterface $movementService)

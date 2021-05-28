@@ -12,7 +12,7 @@ class FindProductByUuidAction extends ProductActionAbstract
     /**
      * @OA\Get(
      *   tags={"Product"},
-     *   path="/products/{id}",
+     *   path="/product/{id}",
      *   operationId="FindProductById",
      *   @OA\Parameter(
      *         name="id",

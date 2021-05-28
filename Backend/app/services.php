@@ -4,6 +4,8 @@ use App\Core\Categories\Domain\CategoryService;
 use App\Core\Categories\Domain\CategoryServiceInterface;
 use App\Core\Measures\Domain\MeasureService;
 use App\Core\Measures\Domain\MeasureServiceInterface;
+use App\Core\Movements\Domain\MovementHistoryService;
+use App\Core\Movements\Domain\MovementHistoryServiceInterface;
 use App\Core\Movements\Domain\MovementService;
 use App\Core\Movements\Domain\MovementServiceInterface;
 use App\Core\Products\Domain\Service\ProductService;
@@ -22,5 +24,6 @@ return function (ContainerBuilder $containerBuilder) {
         MeasureServiceInterface::class => \DI\autowire(MeasureService::class),
         MovementServiceInterface::class => \DI\autowire(MovementService::class),
         ProductStockServiceInterface::class => \DI\autowire(ProductStockService::class),
+        MovementHistoryServiceInterface::class => \DI\autowire(MovementHistoryService::class)
     ]);
 };

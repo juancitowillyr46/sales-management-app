@@ -4,7 +4,9 @@ use App\Core\Categories\Domain\CategoryRepositoryInterface;
 use App\Core\Categories\Infrastructure\Persistence\CategoryRepository;
 use App\Core\Measures\Domain\MeasureRepositoryInterface;
 use App\Core\Measures\Infrastructure\Persistence\MeasureRepository;
+use App\Core\Movements\Domain\MovementHistoryRepositoryInterface;
 use App\Core\Movements\Domain\MovementRepositoryInterface;
+use App\Core\Movements\Infrastructure\Persistence\MovementHistoryRepository;
 use App\Core\Movements\Infrastructure\Persistence\MovementRepository;
 use App\Core\Products\Domain\Repository\ProductRepositoryInterface;
 use App\Core\Products\Domain\Repository\ProductStockRepositoryInterface;
@@ -18,6 +20,7 @@ return function (ContainerBuilder $containerBuilder) {
         CategoryRepositoryInterface::class => \DI\autowire(CategoryRepository::class),
         MeasureRepositoryInterface::class => \DI\autowire(MeasureRepository::class),
         MovementRepositoryInterface::class => \DI\autowire(MovementRepository::class),
-        ProductStockRepositoryInterface::class => \DI\autowire(ProductStockRepository::class)
+        ProductStockRepositoryInterface::class => \DI\autowire(ProductStockRepository::class),
+        MovementHistoryRepositoryInterface::class => \DI\autowire(MovementHistoryRepository::class),
     ]);
 };

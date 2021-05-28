@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use App\Core\Movements\Infrastructure\Controller\AddMovementAction;
+use App\Core\Movements\Infrastructure\Controller\FindMovementHistoryAction;
 use App\Core\Products\Infrastructure\Controller\Slim\Management\AddProductAction;
 use App\Core\Products\Infrastructure\Controller\Slim\Management\DeleteProductAction;
 use App\Core\Products\Infrastructure\Controller\Slim\Management\FindProductByUuidAction;
@@ -32,6 +33,7 @@ return function (App $app) {
     $app->group('/movements', function (Group $group) {
         //$group->get('', FindProductsAction::class);
         $group->post('', AddMovementAction::class);
+        $group->get('/history/{id}', FindMovementHistoryAction::class);
 //        $group->get('/{id}', FindProductByUuidAction::class);
 //        $group->put('/{id}', UpdateProductAction::class);
 //        $group->delete('/{id}', DeleteProductAction::class);
