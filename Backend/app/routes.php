@@ -33,7 +33,7 @@ return function (App $app) {
     $app->group('/movements', function (Group $group) {
         //$group->get('', FindProductsAction::class);
         $group->post('', AddMovementAction::class);
-        $group->get('/history/{id}', FindMovementHistoryAction::class);
+        $group->get('/history/{productId}', FindMovementHistoryAction::class);
 //        $group->get('/{id}', FindProductByUuidAction::class);
 //        $group->put('/{id}', UpdateProductAction::class);
 //        $group->delete('/{id}', DeleteProductAction::class);

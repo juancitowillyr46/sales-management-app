@@ -12,7 +12,7 @@ class FindMovementHistoryAction extends MovementActionAbstract
     /**
      * @OA\Get(
      *   tags={"Movement"},
-     *   path="/products/{productId}",
+     *   path="/movements/history/{productId}",
      *   operationId="FinMovementHistory",
      *   @OA\Parameter(
      *         name="productId",
